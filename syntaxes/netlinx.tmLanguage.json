@@ -105,7 +105,7 @@
                             "name": "punctuation.definition.block.end.netlinx"
                         }
                     },
-                    "patterns": [{ "include": "#blockScope" }]
+                    "patterns": [{ "include": "#functionBody" }]
                 },
                 {
                     "name": "meta.module.definition.netlinx",
@@ -329,14 +329,8 @@
         },
         "controlFlow": {
             "patterns": [
-                {
-                    "name": "keyword.control.flow.netlinx",
-                    "match": "(?i)\\b(if|else|for|while|switch|case|default|break|continue|return|to|active|select)\\b"
-                },
-                {
-                    "name": "keyword.operator.logical.netlinx",
-                    "match": "(?i)\\b(and|or|not)\\b"
-                },
+                { "include": "#ifElseStatement" },
+                { "include": "#controlFlowKeywords" },
                 {
                     "begin": "(?i)\\b(if|while|for|switch)\\s*\\(",
                     "beginCaptures": {
@@ -344,6 +338,30 @@
                     },
                     "end": "\\)",
                     "patterns": [{ "include": "#expressions" }]
+                }
+            ]
+        },
+        "controlFlowKeywords": {
+            "patterns": [
+                {
+                    "name": "keyword.control.flow.netlinx",
+                    "match": "(?i)\\b(if|else|for|while|switch|case|default|break|continue|return|to|active|select)\\b"
+                },
+                {
+                    "name": "keyword.operator.logical.netlinx",
+                    "match": "(?i)\\b(and|or|not)\\b"
+                }
+            ]
+        },
+        "ifElseStatement": {
+            "patterns": [
+                {
+                    "name": "keyword.control.flow.if.netlinx",
+                    "match": "(?i)\\b(if)\\b(?=\\s*\\()"
+                },
+                {
+                    "name": "keyword.control.flow.else.netlinx",
+                    "match": "(?i)\\b(else)\\b"
                 }
             ]
         },
@@ -658,6 +676,36 @@
                 }
             ]
         },
+        "localVariableDeclarations": {
+            "patterns": [
+                {
+                    "name": "meta.variable.declaration.local.netlinx",
+                    "match": "(?i)^\\s*\\b(local_var|stack_var)\\b\\s+(integer|char|long|widechar|sinteger|slong|float|double|dev|devchan|devlev)\\b\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+                    "captures": {
+                        "1": {
+                            "name": "storage.modifier.local.netlinx"
+                        },
+                        "2": { "name": "storage.type.primitive.netlinx" },
+                        "3": {
+                            "name": "variable.other.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "meta.variable.declaration.local.struct.netlinx",
+                    "match": "(?i)^\\s*\\b(local_var|stack_var)\\b\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+                    "captures": {
+                        "1": {
+                            "name": "storage.modifier.local.netlinx"
+                        },
+                        "2": { "name": "entity.name.type.struct.used.netlinx" },
+                        "3": {
+                            "name": "variable.other.netlinx"
+                        }
+                    }
+                }
+            ]
+        },
         "variables": {
             "patterns": [
                 {
@@ -692,13 +740,16 @@
         },
         "blockScope": {
             "patterns": [
+                { "include": "#controlFlowKeywords" },
+                { "include": "#ifElseStatement" },
                 { "include": "#comments" },
                 { "include": "#strings" },
                 { "include": "#controlFlow" },
                 { "include": "#constants" },
-                { "include": "#localVariables" },
+                { "include": "#localVariableDeclarations" },
                 { "include": "#operators" },
                 { "include": "#functionCall" },
+                { "include": "#variablesInBlock" },
                 {
                     "name": "meta.block.netlinx",
                     "begin": "\\{",
@@ -714,6 +765,29 @@
                         }
                     },
                     "patterns": [{ "include": "#blockScope" }]
+                }
+            ]
+        },
+        "variablesInBlock": {
+            "patterns": [
+                { "include": "#globalVariables" },
+                {
+                    "name": "variable.language.netlinx",
+                    "match": "(?i)\\b(push_device|push_channel|push_devchan|release_device|release_channel|release_devchan|master_slot|day|date|time|master_sn|system_number|ldate|button|dv_channel|data|level|timeline|channel|custom)\\b"
+                },
+                {
+                    "name": "variable.other.constant.netlinx",
+                    "match": "(?i)\\b([A-Z][A-Z0-9_]*)\\b",
+                    "captures": {
+                        "1": { "name": "variable.other.constant.netlinx" }
+                    }
+                },
+                {
+                    "name": "variable.other.netlinx",
+                    "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b(?!\\s*[({])",
+                    "captures": {
+                        "1": { "name": "variable.other.netlinx" }
+                    }
                 }
             ]
         },
@@ -755,6 +829,36 @@
                 },
                 { "include": "#comments" },
                 { "include": "#operators" }
+            ]
+        },
+        "functionBody": {
+            "patterns": [
+                { "include": "#controlFlowKeywords" },
+                { "include": "#ifElseStatement" },
+                { "include": "#comments" },
+                { "include": "#strings" },
+                { "include": "#controlFlow" },
+                { "include": "#constants" },
+                { "include": "#localVariableDeclarations" },
+                { "include": "#operators" },
+                { "include": "#functionCall" },
+                { "include": "#variablesInBlock" },
+                {
+                    "name": "meta.block.netlinx",
+                    "begin": "\\{",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.block.begin.netlinx"
+                        }
+                    },
+                    "end": "\\}",
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.block.end.netlinx"
+                        }
+                    },
+                    "patterns": [{ "include": "#blockScope" }]
+                }
             ]
         }
     }
