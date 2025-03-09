@@ -2,32 +2,598 @@
     "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
     "name": "NetLinx",
     "scopeName": "source.netlinx",
-    "fileTypes": ["axs", "axi"],
+    "fileTypes": [
+        "axs",
+        "axi"
+    ],
     "patterns": [
+        {
+            "include": "#comments"
+        },
+        {
+            "include": "#preprocessor"
+        },
+        {
+            "include": "#strings"
+        },
+        {
+            "include": "#define_sections"
+        },
+        {
+            "include": "#functions"
+        },
+        {
+            "include": "#events"
+        },
+        {
+            "include": "#variables"
+        },
+        {
+            "include": "#constants"
+        },
+        {
+            "include": "#operators"
+        },
         {
             "include": "#keywords"
         },
         {
-            "include": "#strings"
+            "include": "#types"
+        },
+        {
+            "include": "#support_constructs"
+        },
+        {
+            "include": "#numeric_values"
         }
     ],
     "repository": {
-        "keywords": {
+        "comments": {
             "patterns": [
                 {
-                    "name": "keyword.control.netlinx",
-                    "match": "\\b(if|while|for|return)\\b"
+                    "name": "comment.block.netlinx",
+                    "begin": "/\\*|\\(\\*",
+                    "end": "\\*/|\\*\\)",
+                    "captures": {
+                        "0": {
+                            "name": "punctuation.definition.comment.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "comment.line.double-slash.netlinx",
+                    "begin": "//",
+                    "end": "$",
+                    "captures": {
+                        "0": {
+                            "name": "punctuation.definition.comment.netlinx"
+                        }
+                    }
                 }
             ]
         },
         "strings": {
-            "name": "string.quoted.double.netlinx",
-            "begin": "\"",
-            "end": "\"",
             "patterns": [
                 {
-                    "name": "constant.character.escape.netlinx",
-                    "match": "\\\\."
+                    "name": "string.quoted.single.netlinx",
+                    "begin": "'",
+                    "end": "'"
+                }
+            ]
+        },
+        "preprocessor": {
+            "patterns": [
+                {
+                    "name": "meta.preprocessor.directive.netlinx",
+                    "match": "(?i)(#)(define|if_defined|if_not_defined|else|end_if|warn|disable_warning)\\b",
+                    "captures": {
+                        "1": {
+                            "name": "punctuation.definition.directive.netlinx"
+                        },
+                        "2": {
+                            "name": "keyword.control.directive.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "meta.preprocessor.include.netlinx",
+                    "match": "(?i)(#)(include)\\b\\s+(['\"][^'\"]+['\"])",
+                    "captures": {
+                        "1": {
+                            "name": "punctuation.definition.directive.netlinx"
+                        },
+                        "2": {
+                            "name": "keyword.control.directive.include.netlinx"
+                        },
+                        "3": {
+                            "name": "string.quoted.include.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "constant.other.preprocessor.netlinx",
+                    "match": "(?i)\\b(__netlinx__|__time__|__date__|__ldate__|__file__|__line__|__name__|__version__|___reserved___)\\b"
+                }
+            ]
+        },
+        "define_sections": {
+            "patterns": [
+                {
+                    "name": "meta.section.netlinx",
+                    "match": "(?i)\\b(define_constant|define_device|define_latching|define_mutually_exclusive|define_program|define_start|define_toggling|define_variable|define_combine|define_connect_level|define_type|define_event)\\b",
+                    "captures": {
+                        "1": {
+                            "name": "storage.type.section.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "meta.section.type.netlinx",
+                    "match": "(?i)\\b(structure|struct)\\b\\s+(\\w+)",
+                    "captures": {
+                        "1": {
+                            "name": "storage.type.section.netlinx"
+                        },
+                        "2": {
+                            "name": "entity.name.type.struct.netlinx"
+                        }
+                    }
+                }
+            ]
+        },
+        "functions": {
+            "patterns": [
+                {
+                    "name": "keyword.control.function.netlinx",
+                    "match": "(?i)\\b(define_function)\\b"
+                },
+                {
+                    "name": "meta.function.definition.netlinx",
+                    "match": "(?i)(\\b(?:define_function)\\s+)([a-zA-Z0-9_\\[\\]]+)(?=\\s+\\w+\\s*\\()",
+                    "captures": {
+                        "1": {
+                            "name": "keyword.control.function.netlinx"
+                        },
+                        "2": {
+                            "name": "storage.type.return.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "meta.function.definition.void.netlinx",
+                    "match": "(?i)(\\b(?:define_function)\\s+)(\\w+)(?=\\s*\\()",
+                    "captures": {
+                        "1": {
+                            "name": "keyword.control.function.netlinx"
+                        },
+                        "2": {
+                            "name": "entity.name.function.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "meta.function.name.netlinx",
+                    "match": "(?i)(?<=\\bdefine_function\\s+[a-zA-Z0-9_\\[\\]]+\\s+)(\\w+)(?=\\s*\\()",
+                    "captures": {
+                        "1": {
+                            "name": "entity.name.function.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "meta.function.call.netlinx",
+                    "match": "\\b(?!if|else|while|for|switch|case|return|break)([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+                    "captures": {
+                        "1": {
+                            "name": "entity.name.function.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "meta.function.call.netlinx",
+                    "match": "(?i)\\b(call|system_call)\\b",
+                    "captures": {
+                        "1": {
+                            "name": "keyword.control.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "meta.function.call.named.netlinx",
+                    "match": "(?i)(?<=\\b(?:call|system_call)\\s+(?:['\"]))([^'\"]+)(?=['\"\\)])",
+                    "captures": {
+                        "1": {
+                            "name": "entity.name.function.netlinx"
+                        }
+                    }
+                }
+            ]
+        },
+        "events": {
+            "patterns": [
+                {
+                    "name": "entity.name.type.event.netlinx",
+                    "match": "(?i)\\b(data_event|channel_event|level_event|button_event|timeline_event|custom_event)\\b"
+                },
+                {
+                    "name": "variable.language.event.data.netlinx",
+                    "match": "(?i)\\b(data\\.device\\.number|data\\.device\\.port|data\\.device\\.system|data\\.device|data\\.number|data\\.sourceip|data\\.sourceport|data\\.text)\\b"
+                },
+                {
+                    "name": "variable.language.event.channel.netlinx",
+                    "match": "(?i)\\b(channel\\.device\\.number|channel\\.device\\.port|channel\\.device\\.system|channel\\.device|channel\\.channel)\\b"
+                },
+                {
+                    "name": "variable.language.event.level.netlinx",
+                    "match": "(?i)\\b(level\\.input\\.device\\.number|level\\.input\\.device\\.port|level\\.input\\.device\\.system|level\\.input\\.device|level\\.input\\.level|level\\.input|level\\.value)\\b"
+                },
+                {
+                    "name": "variable.language.event.button.netlinx",
+                    "match": "(?i)\\b(button\\.input\\.channel|button\\.input\\.device\\.number|button\\.input\\.device\\.port|button\\.input\\.device\\.system|button\\.input\\.device|button\\.input|button\\.holdtime)\\b"
+                },
+                {
+                    "name": "variable.language.event.timeline.netlinx",
+                    "match": "(?i)\\b(timeline\\.id|timeline\\.sequence|timeline\\.time|timeline\\.relative|timeline\\.repetition)\\b"
+                },
+                {
+                    "name": "variable.language.event.custom.netlinx",
+                    "match": "(?i)\\b(custom\\.device\\.number|custom\\.device\\.port|custom\\.device\\.system|custom\\.device|custom\\.id|custom\\.type|custom\\.flag|custom\\.value1|custom\\.value2|custom\\.value3|custom\\.text|custom\\.encode|custom\\.sourcedev\\.number|custom\\.sourcedev\\.port|custom\\.sourcedev\\.system|custom\\.sourcedev)\\b"
+                }
+            ]
+        },
+        "variables": {
+            "patterns": [
+                {
+                    "name": "storage.modifier.netlinx",
+                    "match": "(?i)\\b(constant|non_volatile|volatile|persistent|local_var|stack_var|parameter)\\b"
+                },
+                {
+                    "name": "storage.type.netlinx",
+                    "match": "(?i)\\b(dev|devchan|devlev|char|widechar|integer|sinteger|long|slong|float|double)\\b"
+                },
+                {
+                    "name": "storage.type.struct.netlinx",
+                    "comment": "Match custom struct types in variable declarations",
+                    "match": "(?i)(?<=^\\s*(?:constant|non_volatile|volatile|persistent|local_var|stack_var|parameter)\\s+)([a-zA-Z_][a-zA-Z0-9_]*)(?!\\s*\\()(?=\\s+[a-zA-Z_])",
+                    "captures": {
+                        "1": {
+                            "name": "entity.name.type.struct.used.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "meta.variable.declaration.struct.netlinx",
+                    "comment": "Match custom struct variable declarations",
+                    "match": "(?i)^\\s*\\b(constant|non_volatile|volatile|persistent|local_var|stack_var|parameter)\\b\\s+([a-zA-Z_][a-zA-Z0-9_]*)(?!\\s*\\()\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+                    "captures": {
+                        "1": {
+                            "name": "storage.modifier.netlinx"
+                        },
+                        "2": {
+                            "name": "entity.name.type.struct.used.netlinx"
+                        },
+                        "3": {
+                            "name": "variable.other.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "meta.variable.declaration.netlinx",
+                    "match": "(?i)^\\s*\\b(constant|non_volatile|volatile|persistent|local_var|stack_var|parameter)\\b\\s*(dev|devchan|devlev|char|widechar|integer|sinteger|long|slong|float|double)\\b\\s*([\\w]+)",
+                    "captures": {
+                        "1": {
+                            "name": "storage.modifier.netlinx"
+                        },
+                        "2": {
+                            "name": "storage.type.netlinx"
+                        },
+                        "3": {
+                            "name": "variable.other.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "meta.variable.array.netlinx",
+                    "match": "(?i)(\\[)(.*?)(\\])",
+                    "captures": {
+                        "1": {
+                            "name": "punctuation.definition.array.begin.netlinx"
+                        },
+                        "2": {
+                            "name": "constant.numeric.netlinx"
+                        },
+                        "3": {
+                            "name": "punctuation.definition.array.end.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "meta.variable.parameter.netlinx",
+                    "match": "(?i)\\b(dev|devchan|devlev|char|widechar|integer|sinteger|long|slong|float|double)\\b\\s+([\\w]+)\\b",
+                    "captures": {
+                        "1": {
+                            "name": "storage.type.netlinx"
+                        },
+                        "2": {
+                            "name": "variable.parameter.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "storage.type.struct.parameter.netlinx",
+                    "comment": "Match custom struct types in function parameters",
+                    "match": "(?i)\\b([a-zA-Z_][a-zA-Z0-9_]*)(?!\\s*\\()\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\b(?=\\s*(?:,|\\)))",
+                    "captures": {
+                        "1": {
+                            "name": "entity.name.type.struct.used.netlinx"
+                        },
+                        "2": {
+                            "name": "variable.parameter.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "variable.language.netlinx",
+                    "match": "(?i)\\b(push_device|push_channel|push_devchan|release_device|release_channel|release_devchan|master_slot|day|date|time|master_sn|system_number|ldate|button|dv_channel|data|level|timeline|channel|custom)\\b"
+                },
+                {
+                    "name": "variable.other.netlinx",
+                    "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+                    "captures": {
+                        "1": {
+                            "name": "variable.other.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "meta.variable.declaration.custom.netlinx",
+                    "comment": "Match global variable declarations with custom types but no storage modifier",
+                    "match": "(?i)^\\s*(?<!\\b(?:constant|non_volatile|volatile|persistent|local_var|stack_var|parameter)\\s+)\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b(?!\\s*\\()\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+                    "captures": {
+                        "1": {
+                            "name": "entity.name.type.struct.used.netlinx"
+                        },
+                        "2": {
+                            "name": "variable.other.netlinx"
+                        }
+                    }
+                }
+            ]
+        },
+        "constants": {
+            "patterns": [
+                {
+                    "name": "constant.language.boolean.netlinx",
+                    "match": "(?i)\\b(true|false)\\b"
+                },
+                {
+                    "name": "constant.language.netlinx",
+                    "match": "(?i)\\b(null_str|do_push_timed_infinite)\\b"
+                },
+                {
+                    "name": "constant.language.netlinx_axi",
+                    "match": "(?i)\\b(netlinx_axi_version|url_flg_tcp|url_flg_acctinfopresent|url_flg_temp|url_flg_stat_prgnetlinx|url_flg_stat_mask|url_flg_stat_lookup|url_flg_stat_connecting|url_flg_stat_waiting|url_flg_stat_connected|ip_addr_flg_dhcp|first_local_port|first_virtual_device|dynamic_virtual_device|file_read_only|file_rw_new|file_rw_append|ip_tcp|ip_udp|ip_udp_2way)\\b"
+                },
+                {
+                    "name": "constant.language.timeline.netlinx",
+                    "match": "(?i)\\b(timeline_once|timeline_repeat|timeline_absolute|timeline_relative)\\b"
+                },
+                {
+                    "include": "#numeric_values"
+                },
+                {
+                    "name": "constant.numeric.ipaddr.netlinx",
+                    "match": "[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}"
+                },
+                {
+                    "name": "constant.other.device.netlinx",
+                    "match": "([0-9]{1,5}:[0-9]{1,5}:[0-9]{1,5})"
+                },
+                {
+                    "name": "constant.numeric.hex.netlinx",
+                    "match": "((?:\\$|0x)[0-9a-fA-F]+)"
+                },
+                {
+                    "name": "constant.numeric.netlinx",
+                    "match": "([-]?[.]?\\b[\\d.]+\\b)"
+                }
+            ]
+        },
+        "operators": {
+            "patterns": [
+                {
+                    "name": "keyword.operator.arithmetic.netlinx",
+                    "match": "[\\+\\-*/]"
+                },
+                {
+                    "name": "keyword.operator.assignment.netlinx",
+                    "match": "="
+                },
+                {
+                    "name": "keyword.operator.comparison.netlinx",
+                    "match": "[<>]=?|==|!="
+                },
+                {
+                    "name": "keyword.operator.logical.netlinx",
+                    "match": "(?i)\\b(and|or|not|xor)\\b|&&|\\|\\|"
+                },
+                {
+                    "name": "keyword.operator.bitwise.netlinx",
+                    "match": "(?i)\\b(band|bor|bnot|bxor|lshift|rshift)\\b|&|\\||\\^"
+                }
+            ]
+        },
+        "keywords": {
+            "patterns": [
+                {
+                    "name": "keyword.control.conditional.netlinx",
+                    "match": "(?i)\\b(if|else|switch|case|default)\\b"
+                },
+                {
+                    "name": "keyword.control.loop.netlinx",
+                    "match": "(?i)\\b(for|while|long_while|medium_while|break|next)\\b"
+                },
+                {
+                    "name": "keyword.control.flow.netlinx",
+                    "match": "(?i)\\b(return|select|active)\\b"
+                },
+                {
+                    "name": "keyword.control.device.netlinx",
+                    "match": "(?i)\\b(send_command|send_level|send_string|redirect_string)\\b"
+                },
+                {
+                    "name": "keyword.control.device.state.netlinx",
+                    "match": "(?i)\\b(to|min_to|off|on|pulse|total_off|set_pulse_time|get_pulse_time)\\b"
+                },
+                {
+                    "name": "keyword.control.wait.netlinx",
+                    "match": "(?i)\\b(wait|cancel_wait|cancel_all_wait|pause_wait|restart_wait|restart_all_wait|wait_until|cancel_wait_until|cancel_all_wait_until|pause_all_wait|timed_wait_until)\\b"
+                },
+                {
+                    "name": "keyword.control.buffer.netlinx",
+                    "match": "(?i)\\b(create_buffer|create_multi_buffer|create_level|clear_buffer|get_buffer_char|get_multi_buffer_string|get_buffer_string)\\b"
+                },
+                {
+                    "name": "keyword.control.string.netlinx",
+                    "match": "(?i)\\b(find_string|remove_string|left_string|mid_string|right_string|lower_string|upper_string|compare_string)\\b"
+                },
+                {
+                    "name": "keyword.control.device.info.netlinx",
+                    "match": "(?i)\\b(device_id_string|device_id|device_info)\\b"
+                },
+                {
+                    "name": "keyword.control.event.netlinx",
+                    "match": "(?i)\\b(do_push|do_push_timed|do_release|do_custom_event|rebuild_event)\\b"
+                },
+                {
+                    "name": "keyword.control.system.netlinx",
+                    "match": "(?i)\\b(program_name|module_name|set_timer|get_timer)\\b"
+                },
+                {
+                    "name": "keyword.control.device.combine.netlinx",
+                    "match": "(?i)\\b(uncombine_devices|combine_devices|uncombine_channels|combine_channels|uncombine_levels|combine_levels)\\b"
+                },
+                {
+                    "name": "keyword.control.event.types.netlinx",
+                    "match": "(?i)\\b(string|command|push|release|hold|repeat|online|offline|onerror|standby|wake)\\b"
+                },
+                {
+                    "name": "keyword.control.conversion.netlinx",
+                    "match": "(?i)\\b(itoa|itohex|atoi|atol|atof|ftoa|hextoi)\\b"
+                },
+                {
+                    "name": "keyword.control.math.netlinx",
+                    "match": "(?i)\\b(abs_value|max_value|min_value|exp_value|log_value|log10_value|power_value|sqrt_value)\\b"
+                },
+                {
+                    "name": "keyword.control.file.netlinx",
+                    "match": "(?i)\\b(file_close|file_open|file_delete|file_copy|file_dir|file_setdir|file_getdir|file_createdir|file_removedir|file_read_line|file_read|file_rename|file_seek|file_write_line|file_write)\\b"
+                },
+                {
+                    "name": "keyword.control.network.netlinx",
+                    "match": "(?i)\\b(ip_client_close|ip_client_open|ip_server_close|ip_server_open|ip_mc_server_open|ip_set_option|ip_bound_client_open|ssh_client_close|ssh_client_open|tls_client_close|tls_client_open)\\b"
+                },
+                {
+                    "name": "keyword.control.timeline.netlinx",
+                    "match": "(?i)\\b(timeline_create|timeline_kill|timeline_reload|timeline_pause|timeline_restart|timeline_set|timeline_get|timeline_active|timeline_dynamic_id)\\b"
+                },
+                {
+                    "name": "keyword.control.system.info.netlinx",
+                    "match": "(?i)\\b(get_last|get_master_build|get_unique_id|get_serial_number|get_system_number|set_system_number|get_dns_list|set_dns_list|get_ip_address|set_ip_address|set_validation_code|get_url_list|add_url_entry|delete_url_entry|random_number)\\b"
+                },
+                {
+                    "name": "keyword.control.module.netlinx",
+                    "match": "(?i)\\b(define_module|unload_duet_module|load_duet_module)\\b"
+                }
+            ]
+        },
+        "types": {
+            "patterns": [
+                {
+                    "name": "storage.type.netlinx",
+                    "match": "(?i)\\b(dev|devchan|devlev|char|widechar|integer|sinteger|long|slong|float|double)\\b"
+                },
+                {
+                    "name": "storage.type.struct.netlinx_axi",
+                    "match": "(?i)\\b(tbutton|tchannel|tdata|tlevel|ttimeline|tcustom|url_struct|dns_struct|ip_address_struct|dev_info_struct|clkmgr_timeoffset_struct|clkmgr_timeserver_struct|data_feed|data_field|data_record|wc_data_feed|wc_data_field|wc_data_record|last_login_info)\\b"
+                },
+                {
+                    "name": "entity.name.type.struct.used.netlinx",
+                    "comment": "Match struct type usage in contexts other than definitions",
+                    "match": "(?i)(?<=(?:^|\\s))([a-zA-Z_][a-zA-Z0-9_]*)(?=\\s+[a-zA-Z_][a-zA-Z0-9_]*\\s*(?:\\[|;|,))",
+                    "captures": {
+                        "1": {
+                            "name": "entity.name.type.struct.used.netlinx"
+                        }
+                    }
+                }
+            ]
+        },
+        "support_constructs": {
+            "patterns": [
+                {
+                    "name": "support.function.conversion.netlinx",
+                    "match": "(?i)\\b(string_to_variable|length_variable_to_string|variable_to_string|xml_to_variable|length_variable_to_xml|variable_to_xml|type_cast|format|raw_be|raw_le)\\b"
+                },
+                {
+                    "name": "support.function.date.netlinx",
+                    "match": "(?i)\\b(date_to_day|date_to_month|date_to_year|day_of_week|time_to_hour|time_to_minute|time_to_second|astro_clock)\\b"
+                },
+                {
+                    "name": "support.function.array.netlinx",
+                    "match": "(?i)\\b(max_length_array|max_length_string|set_length_array|set_length_string|length_array|length_string)\\b"
+                },
+                {
+                    "name": "support.function.device.netlinx",
+                    "match": "(?i)\\b(set_virtual_level_count|set_virtual_channel_count|set_virtual_port_count)\\b"
+                },
+                {
+                    "name": "support.function.system.netlinx",
+                    "match": "(?i)\\b(internal_queue_size_set|internal_queue_size_get|internal_threshold_set|internal_threshold_get|duet_mem_size_set|duet_mem_size_get)\\b"
+                },
+                {
+                    "name": "support.function.clock.netlinx",
+                    "match": "(?i)\\b(clkmgr_is_network_sourced|clkmgr_set_clk_source|clkmgr_is_daylightsavings_on|clkmgr_set_daylightsavings_mode|clkmgr_get_timezone|clkmgr_set_timezone|clkmgr_get_resync_period|clkmgr_set_resync_period|clkmgr_get_daylightsavings_offset|clkmgr_set_daylightsavings_offset|clkmgr_get_active_timeserver|clkmgr_set_active_timeserver|clkmgr_get_timeservers|clkmgr_add_userdefined_timeserver|clkmgr_delete_userdefined_timeserver|clkmgr_get_start_daylightsavings_rule|clkmgr_set_start_daylightsavings_rule|clkmgr_get_end_daylightsavings_rule|clkmgr_set_end_daylightsavings_rule)\\b"
+                },
+                {
+                    "name": "support.function.logging.netlinx",
+                    "match": "(?i)\\b(set_log_level|get_log_level|amx_log)\\b"
+                }
+            ]
+        },
+        "numeric_values": {
+            "patterns": [
+                {
+                    "name": "constant.other.device.netlinx",
+                    "comment": "Device number in D:P:S format (e.g., 5001:1:0)",
+                    "match": "\\b([0-9]{1,5}:[0-9]{1,5}:[0-9]{1,5})\\b",
+                    "captures": {
+                        "1": {
+                            "name": "constant.other.device.address.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "constant.numeric.ipaddr.netlinx",
+                    "comment": "IP address format",
+                    "match": "\\b([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})\\b",
+                    "captures": {
+                        "1": {
+                            "name": "constant.other.ip.address.netlinx"
+                        }
+                    }
+                },
+                {
+                    "name": "constant.numeric.hex.netlinx",
+                    "match": "(?:\\$|0x)[0-9a-fA-F]+"
+                },
+                {
+                    "name": "constant.numeric.integer.netlinx",
+                    "match": "\\b[0-9]+\\b"
+                },
+                {
+                    "name": "constant.numeric.float.netlinx",
+                    "match": "\\b[0-9]+\\.[0-9]+\\b"
                 }
             ]
         }

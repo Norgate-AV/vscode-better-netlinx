@@ -3,11 +3,19 @@
     "displayName": "vscode-better-netlinx",
     "description": "Better syntax highlighting for NetLinx",
     "version": "0.0.1",
+    "publisher": "damienbutt",
     "engines": {
         "vscode": "^1.98.0"
     },
     "categories": [
         "Programming Languages"
+    ],
+    "main": "./out/extension.js",
+    "activationEvents": [
+        "onLanguage:netlinx",
+        "workspaceContains:**/*.axs",
+        "workspaceContains:**/*.axi",
+        "onStartupFinished"
     ],
     "contributes": {
         "languages": [
@@ -30,6 +38,31 @@
                 "scopeName": "source.netlinx",
                 "path": "./syntaxes/netlinx.tmLanguage.json"
             }
+        ],
+        "commands": [
+            {
+                "command": "netlinx.reloadSyntax",
+                "title": "NetLinx: Reload Syntax"
+            },
+            {
+                "command": "netlinx.inspectTokens",
+                "title": "NetLinx: Inspect Token Scopes"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "netlinx.inspectTokens",
+                "key": "ctrl+shift+alt+i",
+                "mac": "cmd+shift+alt+i",
+                "when": "editorFocus && editorLangId == netlinx"
+            }
         ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run combine-grammar && npm run compile",
+        "build": "npm run combine-grammar && tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "compile": "tsc -p ./",
+        "combine-grammar": "node ./build/combine-grammar.js"
     }
 }

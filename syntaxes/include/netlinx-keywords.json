@@ -1,0 +1,86 @@
+{
+    "keywords": {
+        "patterns": [
+            {
+                "name": "keyword.control.conditional.netlinx",
+                "match": "(?i)\\b(if|else|switch|case|default)\\b"
+            },
+            {
+                "name": "keyword.control.loop.netlinx",
+                "match": "(?i)\\b(for|while|long_while|medium_while|break|next)\\b"
+            },
+            {
+                "name": "keyword.control.flow.netlinx",
+                "match": "(?i)\\b(return|select|active)\\b"
+            },
+            {
+                "name": "keyword.control.device.netlinx",
+                "match": "(?i)\\b(send_command|send_level|send_string|redirect_string)\\b"
+            },
+            {
+                "name": "keyword.control.device.state.netlinx",
+                "match": "(?i)\\b(to|min_to|off|on|pulse|total_off|set_pulse_time|get_pulse_time)\\b"
+            },
+            {
+                "name": "keyword.control.wait.netlinx",
+                "match": "(?i)\\b(wait|cancel_wait|cancel_all_wait|pause_wait|restart_wait|restart_all_wait|wait_until|cancel_wait_until|cancel_all_wait_until|pause_all_wait|timed_wait_until)\\b"
+            },
+            {
+                "name": "keyword.control.buffer.netlinx",
+                "match": "(?i)\\b(create_buffer|create_multi_buffer|create_level|clear_buffer|get_buffer_char|get_multi_buffer_string|get_buffer_string)\\b"
+            },
+            {
+                "name": "keyword.control.string.netlinx",
+                "match": "(?i)\\b(find_string|remove_string|left_string|mid_string|right_string|lower_string|upper_string|compare_string)\\b"
+            },
+            {
+                "name": "keyword.control.device.info.netlinx",
+                "match": "(?i)\\b(device_id_string|device_id|device_info)\\b"
+            },
+            {
+                "name": "keyword.control.event.netlinx",
+                "match": "(?i)\\b(do_push|do_push_timed|do_release|do_custom_event|rebuild_event)\\b"
+            },
+            {
+                "name": "keyword.control.system.netlinx",
+                "match": "(?i)\\b(program_name|module_name|set_timer|get_timer)\\b"
+            },
+            {
+                "name": "keyword.control.device.combine.netlinx",
+                "match": "(?i)\\b(uncombine_devices|combine_devices|uncombine_channels|combine_channels|uncombine_levels|combine_levels)\\b"
+            },
+            {
+                "name": "keyword.control.event.types.netlinx",
+                "match": "(?i)\\b(string|command|push|release|hold|repeat|online|offline|onerror|standby|wake)\\b"
+            },
+            {
+                "name": "keyword.control.conversion.netlinx",
+                "match": "(?i)\\b(itoa|itohex|atoi|atol|atof|ftoa|hextoi)\\b"
+            },
+            {
+                "name": "keyword.control.math.netlinx",
+                "match": "(?i)\\b(abs_value|max_value|min_value|exp_value|log_value|log10_value|power_value|sqrt_value)\\b"
+            },
+            {
+                "name": "keyword.control.file.netlinx",
+                "match": "(?i)\\b(file_close|file_open|file_delete|file_copy|file_dir|file_setdir|file_getdir|file_createdir|file_removedir|file_read_line|file_read|file_rename|file_seek|file_write_line|file_write)\\b"
+            },
+            {
+                "name": "keyword.control.network.netlinx",
+                "match": "(?i)\\b(ip_client_close|ip_client_open|ip_server_close|ip_server_open|ip_mc_server_open|ip_set_option|ip_bound_client_open|ssh_client_close|ssh_client_open|tls_client_close|tls_client_open)\\b"
+            },
+            {
+                "name": "keyword.control.timeline.netlinx",
+                "match": "(?i)\\b(timeline_create|timeline_kill|timeline_reload|timeline_pause|timeline_restart|timeline_set|timeline_get|timeline_active|timeline_dynamic_id)\\b"
+            },
+            {
+                "name": "keyword.control.system.info.netlinx",
+                "match": "(?i)\\b(get_last|get_master_build|get_unique_id|get_serial_number|get_system_number|set_system_number|get_dns_list|set_dns_list|get_ip_address|set_ip_address|set_validation_code|get_url_list|add_url_entry|delete_url_entry|random_number)\\b"
+            },
+            {
+                "name": "keyword.control.module.netlinx",
+                "match": "(?i)\\b(define_module|unload_duet_module|load_duet_module)\\b"
+            }
+        ]
+    }
+}

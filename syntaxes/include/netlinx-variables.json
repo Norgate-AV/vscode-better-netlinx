@@ -1,0 +1,89 @@
+{
+    "variables": {
+        "patterns": [
+            {
+                "name": "storage.modifier.netlinx",
+                "match": "(?i)\\b(constant|non_volatile|volatile|persistent|local_var|stack_var|parameter)\\b"
+            },
+            {
+                "name": "storage.type.netlinx",
+                "match": "(?i)\\b(dev|devchan|devlev|char|widechar|integer|sinteger|long|slong|float|double)\\b"
+            },
+            {
+                "name": "storage.type.struct.netlinx",
+                "comment": "Match custom struct types in variable declarations",
+                "match": "(?i)(?<=^\\s*(?:constant|non_volatile|volatile|persistent|local_var|stack_var|parameter)\\s+)([a-zA-Z_][a-zA-Z0-9_]*)(?!\\s*\\()(?=\\s+[a-zA-Z_])",
+                "captures": {
+                    "1": { "name": "entity.name.type.struct.used.netlinx" }
+                }
+            },
+            {
+                "name": "meta.variable.declaration.struct.netlinx",
+                "comment": "Match custom struct variable declarations",
+                "match": "(?i)^\\s*\\b(constant|non_volatile|volatile|persistent|local_var|stack_var|parameter)\\b\\s+([a-zA-Z_][a-zA-Z0-9_]*)(?!\\s*\\()\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+                "captures": {
+                    "1": { "name": "storage.modifier.netlinx" },
+                    "2": { "name": "entity.name.type.struct.used.netlinx" },
+                    "3": { "name": "variable.other.netlinx" }
+                }
+            },
+            {
+                "name": "meta.variable.declaration.netlinx",
+                "match": "(?i)^\\s*\\b(constant|non_volatile|volatile|persistent|local_var|stack_var|parameter)\\b\\s*(dev|devchan|devlev|char|widechar|integer|sinteger|long|slong|float|double)\\b\\s*([\\w]+)",
+                "captures": {
+                    "1": { "name": "storage.modifier.netlinx" },
+                    "2": { "name": "storage.type.netlinx" },
+                    "3": { "name": "variable.other.netlinx" }
+                }
+            },
+            {
+                "name": "meta.variable.array.netlinx",
+                "match": "(?i)(\\[)(.*?)(\\])",
+                "captures": {
+                    "1": {
+                        "name": "punctuation.definition.array.begin.netlinx"
+                    },
+                    "2": { "name": "constant.numeric.netlinx" },
+                    "3": { "name": "punctuation.definition.array.end.netlinx" }
+                }
+            },
+            {
+                "name": "meta.variable.parameter.netlinx",
+                "match": "(?i)\\b(dev|devchan|devlev|char|widechar|integer|sinteger|long|slong|float|double)\\b\\s+([\\w]+)\\b",
+                "captures": {
+                    "1": { "name": "storage.type.netlinx" },
+                    "2": { "name": "variable.parameter.netlinx" }
+                }
+            },
+            {
+                "name": "storage.type.struct.parameter.netlinx",
+                "comment": "Match custom struct types in function parameters",
+                "match": "(?i)\\b([a-zA-Z_][a-zA-Z0-9_]*)(?!\\s*\\()\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\b(?=\\s*(?:,|\\)))",
+                "captures": {
+                    "1": { "name": "entity.name.type.struct.used.netlinx" },
+                    "2": { "name": "variable.parameter.netlinx" }
+                }
+            },
+            {
+                "name": "variable.language.netlinx",
+                "match": "(?i)\\b(push_device|push_channel|push_devchan|release_device|release_channel|release_devchan|master_slot|day|date|time|master_sn|system_number|ldate|button|dv_channel|data|level|timeline|channel|custom)\\b"
+            },
+            {
+                "name": "variable.other.netlinx",
+                "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+                "captures": {
+                    "1": { "name": "variable.other.netlinx" }
+                }
+            },
+            {
+                "name": "meta.variable.declaration.custom.netlinx",
+                "comment": "Match global variable declarations with custom types but no storage modifier",
+                "match": "(?i)^\\s*(?<!\\b(?:constant|non_volatile|volatile|persistent|local_var|stack_var|parameter)\\s+)\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b(?!\\s*\\()\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+                "captures": {
+                    "1": { "name": "entity.name.type.struct.used.netlinx" },
+                    "2": { "name": "variable.other.netlinx" }
+                }
+            }
+        ]
+    }
+}

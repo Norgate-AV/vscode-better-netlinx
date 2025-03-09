@@ -1,0 +1,29 @@
+{
+    "preprocessor": {
+        "patterns": [
+            {
+                "name": "meta.preprocessor.directive.netlinx",
+                "match": "(?i)(#)(define|if_defined|if_not_defined|else|end_if|warn|disable_warning)\\b",
+                "captures": {
+                    "1": { "name": "punctuation.definition.directive.netlinx" },
+                    "2": { "name": "keyword.control.directive.netlinx" }
+                }
+            },
+            {
+                "name": "meta.preprocessor.include.netlinx",
+                "match": "(?i)(#)(include)\\b\\s+(['\"][^'\"]+['\"])",
+                "captures": {
+                    "1": { "name": "punctuation.definition.directive.netlinx" },
+                    "2": {
+                        "name": "keyword.control.directive.include.netlinx"
+                    },
+                    "3": { "name": "string.quoted.include.netlinx" }
+                }
+            },
+            {
+                "name": "constant.other.preprocessor.netlinx",
+                "match": "(?i)\\b(__netlinx__|__time__|__date__|__ldate__|__file__|__line__|__name__|__version__|___reserved___)\\b"
+            }
+        ]
+    }
+}

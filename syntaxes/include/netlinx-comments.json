@@ -1,0 +1,26 @@
+{
+    "comments": {
+        "patterns": [
+            {
+                "name": "comment.block.netlinx",
+                "begin": "/\\*|\\(\\*",
+                "end": "\\*/|\\*\\)",
+                "captures": {
+                    "0": {
+                        "name": "punctuation.definition.comment.netlinx"
+                    }
+                }
+            },
+            {
+                "name": "comment.line.double-slash.netlinx",
+                "begin": "//",
+                "end": "$",
+                "captures": {
+                    "0": {
+                        "name": "punctuation.definition.comment.netlinx"
+                    }
+                }
+            }
+        ]
+    }
+}

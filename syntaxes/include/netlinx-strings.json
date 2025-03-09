@@ -1,0 +1,11 @@
+{
+    "strings": {
+        "patterns": [
+            {
+                "name": "string.quoted.single.netlinx",
+                "begin": "'",
+                "end": "'"
+            }
+        ]
+    }
+}

@@ -1,0 +1,54 @@
+{
+    "functions": {
+        "patterns": [
+            {
+                "name": "keyword.control.function.netlinx",
+                "match": "(?i)\\b(define_function)\\b"
+            },
+            {
+                "name": "meta.function.definition.netlinx",
+                "match": "(?i)(\\b(?:define_function)\\s+)([a-zA-Z0-9_\\[\\]]+)(?=\\s+\\w+\\s*\\()",
+                "captures": {
+                    "1": { "name": "keyword.control.function.netlinx" },
+                    "2": { "name": "storage.type.return.netlinx" }
+                }
+            },
+            {
+                "name": "meta.function.definition.void.netlinx",
+                "match": "(?i)(\\b(?:define_function)\\s+)(\\w+)(?=\\s*\\()",
+                "captures": {
+                    "1": { "name": "keyword.control.function.netlinx" },
+                    "2": { "name": "entity.name.function.netlinx" }
+                }
+            },
+            {
+                "name": "meta.function.name.netlinx",
+                "match": "(?i)(?<=\\bdefine_function\\s+[a-zA-Z0-9_\\[\\]]+\\s+)(\\w+)(?=\\s*\\()",
+                "captures": {
+                    "1": { "name": "entity.name.function.netlinx" }
+                }
+            },
+            {
+                "name": "meta.function.call.netlinx",
+                "match": "\\b(?!if|else|while|for|switch|case|return|break)([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+                "captures": {
+                    "1": { "name": "entity.name.function.netlinx" }
+                }
+            },
+            {
+                "name": "meta.function.call.netlinx",
+                "match": "(?i)\\b(call|system_call)\\b",
+                "captures": {
+                    "1": { "name": "keyword.control.netlinx" }
+                }
+            },
+            {
+                "name": "meta.function.call.named.netlinx",
+                "match": "(?i)(?<=\\b(?:call|system_call)\\s+(?:['\"]))([^'\"]+)(?=['\"\\)])",
+                "captures": {
+                    "1": { "name": "entity.name.function.netlinx" }
+                }
+            }
+        ]
+    }
+}
