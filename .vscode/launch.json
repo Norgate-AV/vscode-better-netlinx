@@ -8,7 +8,8 @@
             "request": "launch",
             "args": [
                 "--profile=syntax",
-                "--extensionDevelopmentPath=${workspaceFolder}"
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "${workspaceFolder}/tests/samples"
             ],
             "outFiles": [
                 "${workspaceFolder}/out/**/*.js"
@@ -22,7 +23,8 @@
             "request": "launch",
             "args": [
                 "--disable-extensions",
-                "--extensionDevelopmentPath=${workspaceFolder}"
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "${workspaceFolder}/tests/samples"
             ],
             "outFiles": [
                 "${workspaceFolder}/out/**/*.js"

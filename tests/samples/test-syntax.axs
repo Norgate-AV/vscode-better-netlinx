@@ -121,11 +121,11 @@ DEFINE_FUNCTION CHAR[100] TestFunction2(INTEGER param1, CHAR param2[])
 
     IF (param1 > 5 AND param1 < 10)
     {
-        result = "Parameter is between 5 and 10"
+        result = 'Parameter is between 5 and 10'
     }
-    ELSE
+    else
     {
-        result = "Parameter is out of range"
+        result = 'Parameter is out of range'
     }
 
     RETURN result
@@ -280,11 +280,6 @@ BUTTON_EVENT[dvTP, 1]
     HOLD[3.5]:
     {
         SEND_STRING 0, 'Button held for 3.5 seconds'
-    }
-
-    DOUBLE_CLICK:
-    {
-        SEND_STRING 0, 'Button double-clicked'
     }
 }
 
@@ -441,11 +436,6 @@ DEFINE_START
 
     // Serial port configuration
     CREATE_BUFFER dvRS232, cBuffer
-    SET_BAUD_RATE(dvRS232, 9600)
-    SET_DATA_BITS(dvRS232, DATA_BITS_8)
-    SET_STOP_BITS(dvRS232, STOP_BITS_1)
-    SET_PARITY(dvRS232, PARITY_NONE)
-    SET_FLOW_CONTROL(dvRS232, FLOW_NONE)
 
     // Send initialization commands
     SEND_STRING dvProjector, "$13,$10,'POWER ON',$13,$10"
@@ -476,14 +466,7 @@ DEFINE_CALL 'HandlePowerStatus' (CHAR status[])
 }
 
 // DEFINE_COMBINE_EVENTS section
-DEFINE_COMBINE_EVENTS
-COMBINE_EVENTS [dvTP, [1,2,3,4]]
-NAME 'NavigationButtons'
-{
-    STACK_VAR INTEGER btn
-    btn = BUTTON.INPUT.CHANNEL
-    SEND_STRING 0, "'Navigation button pressed: ', ITOA(btn)"
-}
+DEFINE_COMBINE
 
 // DEFINE_LATCHING section
 DEFINE_LATCHING

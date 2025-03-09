@@ -47,6 +47,18 @@
             {
                 "command": "netlinx.inspectTokens",
                 "title": "NetLinx: Inspect Token Scopes"
+            },
+            {
+                "command": "netlinx.exportTokens",
+                "title": "NetLinx: Interactive Token Analyzer"
+            },
+            {
+                "command": "netlinx.enableThemeEnhancements",
+                "title": "NetLinx: Enable Theme Enhancements"
+            },
+            {
+                "command": "netlinx.disableThemeEnhancements",
+                "title": "NetLinx: Disable Theme Enhancements"
             }
         ],
         "keybindings": [
@@ -56,18 +68,31 @@
                 "mac": "cmd+shift+alt+i",
                 "when": "editorFocus && editorLangId == netlinx"
             }
-        ]
+        ],
+        "configuration": {
+            "title": "NetLinx",
+            "properties": {
+                "netlinx.enhanceThemeColors": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Apply custom token colors to better highlight NetLinx sections"
+                }
+            }
+        }
     },
     "scripts": {
-        "vscode:prepublish": "npm run combine-grammar && npm run compile",
-        "build": "npm run combine-grammar && tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "compile": "tsc -p ./",
-        "combine-grammar": "node ./build/combine-grammar.js"
+        "vscode:prepublish": "pnpm build",
+        "build": "NODE_ENV=production tsup",
+        "dev": "tsup --watch",
+        "watch": "tsup --watch",
+        "lint": "tsc --noEmit",
+        "compile": "tsup"
     },
     "devDependencies": {
+        "@types/node": "^22.13.10",
         "@types/vscode": "^1.98.0",
-        "@types/node": "^20.10.0",
+        "terser": "^5.39.0",
+        "tsup": "^8.4.0",
         "typescript": "^5.3.3"
     },
     "extensionDependencies": [],
