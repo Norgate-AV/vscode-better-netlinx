@@ -82,13 +82,30 @@
             "patterns": [
                 {
                     "name": "meta.function.definition.netlinx",
-                    "match": "(?i)^\\s*\\b(define_function)\\b\\s+(?:(\\w+)(?:\\[(\\d+|\\w+)\\])?\\s+)?([a-zA-Z_][a-zA-Z0-9_]*)",
-                    "captures": {
+                    "begin": "(?i)^\\s*\\b(define_function)\\b\\s+(?:(\\w+)(?:\\[(\\d+|\\w+)\\])?\\s+)?([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+                    "beginCaptures": {
                         "1": { "name": "keyword.declaration.function.netlinx" },
                         "2": { "name": "storage.type.return-type.netlinx" },
                         "3": { "name": "constant.numeric.array-size.netlinx" },
                         "4": { "name": "entity.name.function.netlinx" }
-                    }
+                    },
+                    "end": "\\)",
+                    "patterns": [{ "include": "#functionParameters" }]
+                },
+                {
+                    "begin": "(?<=\\))\\s*\\{",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.block.begin.netlinx"
+                        }
+                    },
+                    "end": "\\}",
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.block.end.netlinx"
+                        }
+                    },
+                    "patterns": [{ "include": "#blockScope" }]
                 },
                 {
                     "name": "meta.module.definition.netlinx",
@@ -319,6 +336,14 @@
                 {
                     "name": "keyword.operator.logical.netlinx",
                     "match": "(?i)\\b(and|or|not)\\b"
+                },
+                {
+                    "begin": "(?i)\\b(if|while|for|switch)\\s*\\(",
+                    "beginCaptures": {
+                        "1": { "name": "keyword.control.flow.netlinx" }
+                    },
+                    "end": "\\)",
+                    "patterns": [{ "include": "#expressions" }]
                 }
             ]
         },
@@ -663,6 +688,73 @@
                         }
                     }
                 }
+            ]
+        },
+        "blockScope": {
+            "patterns": [
+                { "include": "#comments" },
+                { "include": "#strings" },
+                { "include": "#controlFlow" },
+                { "include": "#constants" },
+                { "include": "#localVariables" },
+                { "include": "#operators" },
+                { "include": "#functionCall" },
+                {
+                    "name": "meta.block.netlinx",
+                    "begin": "\\{",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.block.begin.netlinx"
+                        }
+                    },
+                    "end": "\\}",
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.block.end.netlinx"
+                        }
+                    },
+                    "patterns": [{ "include": "#blockScope" }]
+                }
+            ]
+        },
+        "functionCall": {
+            "name": "meta.function-call.netlinx",
+            "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\()",
+            "captures": {
+                "1": { "name": "entity.name.function.call.netlinx" }
+            }
+        },
+        "expressions": {
+            "patterns": [
+                { "include": "#constants" },
+                { "include": "#strings" },
+                { "include": "#operators" },
+                { "include": "#functionCall" },
+                { "include": "#variables" }
+            ]
+        },
+        "functionParameters": {
+            "patterns": [
+                {
+                    "name": "meta.parameter.primitive.netlinx",
+                    "match": "(?i)\\b(integer|char|long|widechar|sinteger|slong|float|double|dev|devchan|devlev)\\b\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?:\\[(\\d+)?\\])?",
+                    "captures": {
+                        "1": { "patterns": [{ "include": "#primitiveTypes" }] },
+                        "2": { "name": "variable.parameter.netlinx" },
+                        "3": { "name": "constant.numeric.array-size.netlinx" }
+                    }
+                },
+                {
+                    "name": "meta.parameter.struct.netlinx",
+                    "match": "(?i)\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?:\\[(\\d+)?\\])?",
+                    "captures": {
+                        "1": { "name": "entity.name.type.struct.used.netlinx" },
+                        "2": { "name": "variable.parameter.netlinx" },
+                        "3": { "name": "constant.numeric.array-size.netlinx" }
+                    }
+                },
+                { "include": "#comments" },
+                { "include": "#operators" }
             ]
         }
     }
