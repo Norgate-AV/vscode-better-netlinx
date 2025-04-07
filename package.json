@@ -3,7 +3,7 @@
     "displayName": "vscode-better-netlinx",
     "description": "Better syntax highlighting for NetLinx",
     "version": "0.0.1",
-    "publisher": "damienbutt",
+    "publisher": "Norgate AV",
     "engines": {
         "vscode": "^1.98.0"
     },
@@ -12,7 +12,6 @@
     ],
     "main": "./out/extension.js",
     "activationEvents": [
-        "onLanguage:netlinx",
         "workspaceContains:**/*.axs",
         "workspaceContains:**/*.axi",
         "onStartupFinished"
@@ -27,7 +26,9 @@
                 ],
                 "extensions": [
                     ".axs",
-                    ".axi"
+                    ".axi",
+                    ".axb",
+                    ".lib"
                 ],
                 "configuration": "./language-configuration.json"
             }
@@ -76,8 +77,25 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Apply custom token colors to better highlight NetLinx sections"
+                },
+                "netlinx.parser.autoUpdate": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Automatically update the Tree-sitter parser when new versions are available"
+                },
+                "netlinx.parser.updateInterval": {
+                    "type": "number",
+                    "default": 1,
+                    "description": "Number of days between checking for parser updates",
+                    "minimum": 1,
+                    "maximum": 90
                 }
             }
+        }
+    },
+    "config": {
+        "parser": {
+            "repository": "Norgate-AV/tree-sitter-netlinx"
         }
     },
     "scripts": {
@@ -86,14 +104,21 @@
         "dev": "tsup --watch",
         "watch": "tsup --watch",
         "lint": "tsc --noEmit",
-        "compile": "tsup"
+        "compile": "tsup",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:ui": "vitest --ui",
+        "test:coverage": "vitest run --coverage"
     },
     "devDependencies": {
-        "@types/node": "^22.13.10",
-        "@types/vscode": "^1.98.0",
+        "@types/node": "^22.14.0",
+        "@types/vscode": "^1.99.0",
+        "@vitest/coverage-v8": "^3.1.1",
+        "@vitest/ui": "^3.1.1",
         "terser": "^5.39.0",
         "tsup": "^8.4.0",
-        "typescript": "^5.3.3"
+        "typescript": "^5.8.3",
+        "vitest": "^3.1.1"
     },
     "extensionDependencies": [],
     "extensionPack": []

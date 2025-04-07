@@ -496,7 +496,3 @@ DEFINE_PROGRAM
     // Level tracking
     SEND_LEVEL vdvTest, 1, GET_LEVEL(dvTP, 1)
 }
-
-
-
-

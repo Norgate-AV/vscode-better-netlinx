@@ -9,11 +9,9 @@
             "args": [
                 "--profile=syntax",
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "${workspaceFolder}/tests/samples"
+                "${workspaceFolder}/test/samples"
             ],
-            "outFiles": [
-                "${workspaceFolder}/out/**/*.js"
-            ],
+            "outFiles": ["${workspaceFolder}/out/**/*.js"],
             "preLaunchTask": "npm: build",
             "sourceMaps": true
         },
@@ -24,11 +22,9 @@
             "args": [
                 "--disable-extensions",
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "${workspaceFolder}/tests/samples"
+                "${workspaceFolder}/test/samples"
             ],
-            "outFiles": [
-                "${workspaceFolder}/out/**/*.js"
-            ],
+            "outFiles": ["${workspaceFolder}/out/**/*.js"],
             "preLaunchTask": "npm: build",
             "sourceMaps": true
         }

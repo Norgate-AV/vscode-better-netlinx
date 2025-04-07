@@ -2,11 +2,11 @@
     "compilerOptions": {
         "module": "NodeNext",
         "target": "ES2022",
-        "lib": ["ES2022"],
+        "lib": ["ES2022", "DOM"],
         "sourceMap": true,
         "rootDir": "src",
         "strict": true,
-        "noEmit": true /* Changed: Don't emit files, just do type checking */,
+        "noEmit": true,
         "noImplicitAny": true,
         "noImplicitReturns": true,
         "noUnusedLocals": true,
@@ -14,5 +14,5 @@
         "esModuleInterop": true,
         "skipLibCheck": true
     },
-    "exclude": ["node_modules", ".vscode-test"]
+    "include": ["src/**/*"]
 }
