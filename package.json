@@ -78,6 +78,24 @@
                     "default": false,
                     "description": "Apply custom token colors to better highlight NetLinx sections"
                 },
+                "netlinx.languageServer.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable the NetLinx language server for advanced language features"
+                },
+                "netlinx.languageServer.path": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Path to the NetLinx language server executable. If empty, the extension will try to find it in PATH."
+                },
+                "netlinx.languageServer.args": {
+                    "type": "array",
+                    "default": [],
+                    "description": "Additional command-line arguments for the language server",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "netlinx.parser.autoUpdate": {
                     "type": "boolean",
                     "default": false,
@@ -119,6 +137,9 @@
         "tsup": "^8.4.0",
         "typescript": "^5.8.3",
         "vitest": "^3.1.1"
+    },
+    "dependencies": {
+        "vscode-languageclient": "^9.0.1"
     },
     "extensionDependencies": [],
     "extensionPack": []

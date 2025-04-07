@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import fs from "node:fs";
 import path from "node:path";
+import { getLanguageConfiguration } from "./ExtensionConfig";
 
 /**
  * Function to reload the extension host
@@ -26,6 +27,7 @@ export function setupSyntaxFileWatchers(
 ): vscode.Disposable[] {
     const disposables: vscode.Disposable[] = [];
     const extensionPath = context.extensionPath;
+    const langConfig = getLanguageConfiguration(context);
     const syntaxFilePath = path.join(
         extensionPath,
         "syntaxes",
@@ -33,6 +35,11 @@ export function setupSyntaxFileWatchers(
     );
 
     console.log(`Watching syntax file: ${syntaxFilePath}`);
+    console.log(
+        `Language config loaded with extensions: ${langConfig.extensions.join(
+            ", "
+        )}`
+    );
 
     // Create a file system watcher using VS Code API - more reliable than fs.watch
     try {
@@ -49,8 +56,7 @@ export function setupSyntaxFileWatchers(
             const statusBarItem = vscode.window.createStatusBarItem(
                 vscode.StatusBarAlignment.Right
             );
-            statusBarItem.text =
-                "$(sync~spin) NetLinx syntax changed. Reloading...";
+            statusBarItem.text = `$(sync~spin) ${langConfig.displayName} syntax changed. Reloading...`;
             statusBarItem.show();
 
             // Automatically reload after a brief delay
@@ -82,8 +88,7 @@ export function setupSyntaxFileWatchers(
                         const statusBarItem = vscode.window.createStatusBarItem(
                             vscode.StatusBarAlignment.Right
                         );
-                        statusBarItem.text =
-                            "$(sync~spin) NetLinx syntax changed. Reloading...";
+                        statusBarItem.text = `$(sync~spin) ${langConfig.displayName} syntax changed. Reloading...`;
                         statusBarItem.show();
 
                         // Add a delay before reloading to ensure file write is complete
@@ -123,7 +128,7 @@ export function setupSyntaxFileWatchers(
             try {
                 console.log("Manual reload triggered");
                 vscode.window.showInformationMessage(
-                    "Reloading NetLinx extension..."
+                    `Reloading ${langConfig.displayName} extension...`
                 );
 
                 // Use safer reload approach

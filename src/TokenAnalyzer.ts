@@ -1,6 +1,10 @@
 import * as vscode from "vscode";
 import fs from "node:fs";
 import path from "node:path";
+import {
+    createFileExtensionGlob,
+    getLanguageConfiguration,
+} from "./ExtensionConfig";
 
 export interface TokenData {
     file: string;
@@ -227,6 +231,11 @@ export async function runAutoTokenAnalysis(
         setTimeout(async () => {
             try {
                 const editor = vscode.window.activeTextEditor;
+                // Get language configuration to use the correct file extensions
+                const langConfig = getLanguageConfiguration(context);
+                const filePattern = createFileExtensionGlob(
+                    langConfig.extensions
+                );
 
                 if (editor) {
                     console.log(
@@ -243,9 +252,9 @@ export async function runAutoTokenAnalysis(
                         );
                     }
                 } else {
-                    // Try to find a NetLinx file and open it
+                    // Try to find a NetLinx file and open it using the extensions from config
                     const netLinxFiles = await vscode.workspace.findFiles(
-                        "**/*.{axs,axi}",
+                        filePattern,
                         null,
                         1
                     );
@@ -270,7 +279,7 @@ export async function runAutoTokenAnalysis(
                         }
                     } else {
                         console.log(
-                            "No NetLinx files found in workspace for auto token analysis"
+                            `No files matching ${filePattern} found in workspace for auto token analysis`
                         );
                     }
                 }

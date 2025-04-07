@@ -4,6 +4,7 @@ import {
     registerTokenAnalyzerCommands,
     runAutoTokenAnalysis,
 } from "./TokenAnalyzer";
+import { startLanguageServer, stopLanguageServer } from "./LanguageClient";
 
 export async function activate(context: vscode.ExtensionContext) {
     const extensionName = "vscode-better-netlinx";
@@ -23,6 +24,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
         // Run automatic token analysis in development mode
         await runAutoTokenAnalysis(context);
+
+        // Start the NetLinx language server
+        await startLanguageServer(context);
     } catch (e) {
         console.error("Error during extension activation:", e);
     }
@@ -31,4 +35,5 @@ export async function activate(context: vscode.ExtensionContext) {
 // This method is called when the extension is deactivated
 export function deactivate() {
     console.log('Extension "vscode-better-netlinx" is now deactivated!');
+    return stopLanguageServer();
 }
