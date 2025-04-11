@@ -31,8 +31,11 @@ export async function startLanguageServer(
     const langConfig = getLanguageConfiguration(context);
 
     // Get server path from settings
-    let serverPath = config.get<string>("languageServer.path", "");
+    // let serverPath = config.get<string>("languageServer.path", "/Users/damienbutt/Projects/netlinx-language-server/build/netlinx-language-server");
+    let serverPath = "/Users/damienbutt/Projects/netlinx-language-server/build/netlinx-language-server";
     const serverArgs = config.get<string[]>("languageServer.args", []);
+
+    console.log(serverPath || "netlinx-language-server doesn't exist");
 
     // If path not specified in settings, use default based on platform
     if (!serverPath) {
@@ -107,8 +110,7 @@ export async function startLanguageServer(
             error
         );
         vscode.window.showErrorMessage(
-            `Failed to start ${langConfig.displayName} language server: ${
-                error instanceof Error ? error.message : String(error)
+            `Failed to start ${langConfig.displayName} language server: ${error instanceof Error ? error.message : String(error)
             }`
         );
     }

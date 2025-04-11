@@ -4,3 +4,4 @@ out/
 *.vsix
 .history/
 token-analysis.json
+*.log
