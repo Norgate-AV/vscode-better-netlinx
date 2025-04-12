@@ -18,6 +18,7 @@ vitest.config.ts
 .nvmrc
 .lintstagedrc.json
 .all-contributorsrc
+eslint.config.mjs
 
 # Exclude CI/CD and Husky files
 .github/**
