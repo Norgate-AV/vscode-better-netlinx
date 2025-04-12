@@ -7,7 +7,7 @@ export default defineConfig({
     outDir: "out",
     format: ["cjs"],
     target: "es2022",
-    sourcemap: true,
+    sourcemap: process.env.NODE_ENV !== "production",
     minify: "terser",
     dts: false,
     clean: true,
