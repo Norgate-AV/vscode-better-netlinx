@@ -1,7 +1,8 @@
 # vscode-better-netlinx
 
 <div align="center">
-    <img align="center" src="./assets/img/NetLinx1.png" alt="netlinx-logo" width="150"/>
+    <img align="center" src="./assets/img/vscode.png" alt="vscode-logo" width="140" hspace="20" />
+    <img align="center" src="./assets/img/NetLinx1.png" alt="netlinx-logo" width="150" hspace="20"/>
 </div>
 
 ---
