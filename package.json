@@ -3,7 +3,7 @@
     "displayName": "vscode-better-netlinx",
     "description": "Better NetLinx support for Visual Studio Code",
     "version": "0.0.1",
-    "publisher": "Norgate AV",
+    "publisher": "Norgate-AV",
     "icon": "assets/img/NetLinx1.png",
     "license": "MIT",
     "repository": {
