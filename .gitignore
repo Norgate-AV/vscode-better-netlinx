@@ -5,3 +5,4 @@ out/
 .history/
 token-analysis.json
 *.log
+.env
