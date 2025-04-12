@@ -22,30 +22,39 @@ export interface LanguageConfiguration {
     displayName: string;
 }
 
+interface PackageJson {
+    id: string;
+    contributes?: {
+        languages?: Array<{
+            id: string;
+            extensions?: string[];
+            aliases?: string[];
+        }>;
+    };
+}
+
 /**
  * Get language configuration from package.json
  */
 export function getLanguageConfiguration(
-    context: vscode.ExtensionContext
+    context: vscode.ExtensionContext,
 ): LanguageConfiguration {
     try {
         const packageJsonPath = path.join(
             context.extensionPath,
-            "package.json"
+            "package.json",
         );
         const packageJson = JSON.parse(
-            fs.readFileSync(packageJsonPath, "utf-8")
-        );
+            fs.readFileSync(packageJsonPath, "utf-8"),
+        ) as PackageJson;
 
         // Find the NetLinx language definition
         const languages = packageJson.contributes?.languages || [];
-        const netlinxLanguage = languages.find(
-            (lang: any) => lang.id === "netlinx"
-        );
+        const netlinxLanguage = languages.find((lang) => lang.id === "netlinx");
 
         if (!netlinxLanguage) {
             console.error(
-                "Could not find NetLinx language definition in package.json"
+                "Could not find NetLinx language definition in package.json",
             );
             return {
                 id: "netlinx",
@@ -56,8 +65,8 @@ export function getLanguageConfiguration(
 
         return {
             id: netlinxLanguage.id,
-            extensions: netlinxLanguage.extensions.map((ext: string) =>
-                ext.replace(".", "")
+            extensions: (netlinxLanguage.extensions ?? []).map((ext: string) =>
+                ext.replace(".", ""),
             ),
             displayName: netlinxLanguage.aliases?.[0] || "NetLinx",
         };

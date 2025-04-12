@@ -16,7 +16,7 @@ let client: LanguageClient | undefined;
  * Start the NetLinx language server
  */
 export async function startLanguageServer(
-    context: vscode.ExtensionContext
+    context: vscode.ExtensionContext,
 ): Promise<void> {
     const config = vscode.workspace.getConfiguration("netlinx");
     const isEnabled = config.get<boolean>("languageServer.enabled", true);
@@ -43,7 +43,7 @@ export async function startLanguageServer(
                 ? "netlinx-language-server.exe"
                 : "netlinx-language-server";
         console.log(
-            `No server path specified in settings, using default: ${serverPath}`
+            `No server path specified in settings, using default: ${serverPath}`,
         );
     } else {
         console.log(`Using language server path from settings: ${serverPath}`);
@@ -53,7 +53,7 @@ export async function startLanguageServer(
         documentSelector: [{ scheme: "file", language: langConfig.id }],
         synchronize: {
             fileEvents: vscode.workspace.createFileSystemWatcher(
-                createFileExtensionGlob(langConfig.extensions)
+                createFileExtensionGlob(langConfig.extensions),
             ),
         },
     };
@@ -70,12 +70,12 @@ export async function startLanguageServer(
         "netlinx-language-server",
         "NetLinx Language Server",
         serverOptions,
-        clientOptions
+        clientOptions,
     );
 
     try {
         const disposable = new vscode.Disposable(() => {
-            client?.stop();
+            void client?.stop();
         });
 
         // Start the client
@@ -83,7 +83,7 @@ export async function startLanguageServer(
         context.subscriptions.push(disposable);
 
         console.log(
-            `${langConfig.displayName} language server started at: ${serverPath}`
+            `${langConfig.displayName} language server started at: ${serverPath}`,
         );
         if (serverArgs.length > 0) {
             console.log(`Language server arguments: ${serverArgs.join(" ")}`);
@@ -91,17 +91,17 @@ export async function startLanguageServer(
 
         // Show info message when the server is ready
         vscode.window.showInformationMessage(
-            `${langConfig.displayName} language server is now active`
+            `${langConfig.displayName} language server is now active`,
         );
     } catch (error) {
         console.error(
             `Failed to start ${langConfig.displayName} language server:`,
-            error
+            error,
         );
         vscode.window.showErrorMessage(
             `Failed to start ${langConfig.displayName} language server: ${
                 error instanceof Error ? error.message : String(error)
-            }`
+            }`,
         );
     }
 }

@@ -5,6 +5,8 @@ import {
     runAutoTokenAnalysis,
 } from "./TokenAnalyzer";
 import { startLanguageServer, stopLanguageServer } from "./LanguageClient";
+import { getCommands } from "./Commands";
+import { getTasks } from "./Tasks";
 
 export async function activate(context: vscode.ExtensionContext) {
     const extensionName = "vscode-better-netlinx";
@@ -13,8 +15,14 @@ export async function activate(context: vscode.ExtensionContext) {
     try {
         // Show a notification that the extension is active
         vscode.window.showInformationMessage(
-            `${extensionName} activated! NetLinx syntax highlighting enabled.`
+            `${extensionName} activated! NetLinx syntax highlighting enabled.`,
         );
+
+        // Register commands
+        context.subscriptions.push(...getCommands());
+
+        // Register Tasks
+        context.subscriptions.push(...getTasks());
 
         // Set up file watchers for syntax files
         context.subscriptions.push(...setupSyntaxFileWatchers(context));

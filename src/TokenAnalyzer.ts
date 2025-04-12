@@ -23,7 +23,7 @@ export interface TokenData {
  */
 export async function saveTokenData(
     document: vscode.TextDocument,
-    extensionPath: string
+    extensionPath: string,
 ): Promise<string | undefined> {
     try {
         if (!document) {
@@ -52,7 +52,7 @@ export async function saveTokenData(
             // This is a simplified tokenization - in a real scenario,
             // we would use VS Code's tokenization API more extensively
             const tokenChars = line.split(/([^\w])/);
-            let charPos = 0;
+            // let charPos = 0;
 
             for (const token of tokenChars) {
                 if (token.trim().length > 0) {
@@ -60,7 +60,7 @@ export async function saveTokenData(
                         scope: "variable.other.netlinx", // Default scope
                     });
                 }
-                charPos += token.length;
+                // charPos += token.length;
             }
 
             tokenData.lines.push(lineData);
@@ -82,7 +82,7 @@ export async function saveTokenData(
  * Register commands for token analysis functionality
  */
 export function registerTokenAnalyzerCommands(
-    context: vscode.ExtensionContext
+    context: vscode.ExtensionContext,
 ): vscode.Disposable[] {
     const disposables: vscode.Disposable[] = [];
 
@@ -91,7 +91,7 @@ export function registerTokenAnalyzerCommands(
         "netlinx.inspectTokens",
         () => {
             vscode.commands.executeCommand("editor.action.inspectTMScopes");
-        }
+        },
     );
     disposables.push(inspectTokensCommand);
 
@@ -110,45 +110,47 @@ export function registerTokenAnalyzerCommands(
             try {
                 // Use an extension command not in the public API but often works
                 // This is using internal VS Code functionality which might change
-                const tokenColors = await vscode.commands.executeCommand(
-                    "vscode.executeDocumentHighlights",
-                    document.uri,
-                    new vscode.Position(0, 0)
-                );
+                // const tokenColors = await vscode.commands.executeCommand(
+                //     "vscode.executeDocumentHighlights",
+                //     document.uri,
+                //     new vscode.Position(0, 0)
+                // );
 
                 // Create a WebView panel to display a live token map
                 const panel = vscode.window.createWebviewPanel(
                     "tokenAnalyzer",
                     `Token Analysis: ${path.basename(document.fileName)}`,
                     vscode.ViewColumn.Beside,
-                    { enableScripts: true }
+                    { enableScripts: true },
                 );
 
                 // Status bar message
                 vscode.window.setStatusBarMessage("Analyzing tokens...", 3000);
 
                 // Set up message handling between extension and webview
-                panel.webview.onDidReceiveMessage(async (message) => {
-                    if (message.command === "saveTokenData") {
-                        try {
-                            const fileName = path.join(
-                                context.extensionPath,
-                                "token-analysis.json"
-                            );
-                            fs.writeFileSync(
-                                fileName,
-                                JSON.stringify(message.data, null, 2)
-                            );
-                            vscode.window.showInformationMessage(
-                                `Token data saved to: ${fileName}`
-                            );
-                        } catch (err) {
-                            vscode.window.showErrorMessage(
-                                `Failed to save token data: ${err}`
-                            );
+                panel.webview.onDidReceiveMessage(
+                    async (message: { command: string; data?: any }) => {
+                        if (message.command === "saveTokenData") {
+                            try {
+                                const fileName = path.join(
+                                    context.extensionPath,
+                                    "token-analysis.json",
+                                );
+                                fs.writeFileSync(
+                                    fileName,
+                                    JSON.stringify(message.data, null, 2),
+                                );
+                                vscode.window.showInformationMessage(
+                                    `Token data saved to: ${fileName}`,
+                                );
+                            } catch (err) {
+                                vscode.window.showErrorMessage(
+                                    `Failed to save token data: ${err}`,
+                                );
+                            }
                         }
-                    }
-                });
+                    },
+                );
 
                 // Build HTML content for the webview
                 const htmlContent = `
@@ -203,10 +205,10 @@ export function registerTokenAnalyzerCommands(
             } catch (err) {
                 console.error("Error analyzing tokens:", err);
                 vscode.window.showErrorMessage(
-                    `Failed to analyze tokens: ${err}`
+                    `Failed to analyze tokens: ${err}`,
                 );
             }
-        }
+        },
     );
     disposables.push(exportTokensCommand);
 
@@ -217,7 +219,7 @@ export function registerTokenAnalyzerCommands(
  * Run automatic token analysis in development mode
  */
 export async function runAutoTokenAnalysis(
-    context: vscode.ExtensionContext
+    context: vscode.ExtensionContext,
 ): Promise<void> {
     if (
         process.env.VSCODE_DEBUG_MODE === "true" ||
@@ -234,21 +236,21 @@ export async function runAutoTokenAnalysis(
                 // Get language configuration to use the correct file extensions
                 const langConfig = getLanguageConfiguration(context);
                 const filePattern = createFileExtensionGlob(
-                    langConfig.extensions
+                    langConfig.extensions,
                 );
 
                 if (editor) {
                     console.log(
-                        "Automatically exporting token analysis for active editor"
+                        "Automatically exporting token analysis for active editor",
                     );
                     const fileName = await saveTokenData(
                         editor.document,
-                        context.extensionPath
+                        context.extensionPath,
                     );
                     if (fileName) {
                         vscode.window.setStatusBarMessage(
                             `Token analysis exported to: ${fileName}`,
-                            5000
+                            5000,
                         );
                     }
                 } else {
@@ -256,30 +258,30 @@ export async function runAutoTokenAnalysis(
                     const netLinxFiles = await vscode.workspace.findFiles(
                         filePattern,
                         null,
-                        1
+                        1,
                     );
 
                     if (netLinxFiles.length > 0) {
                         console.log(
-                            `Found NetLinx file: ${netLinxFiles[0].fsPath}`
+                            `Found NetLinx file: ${netLinxFiles[0]?.fsPath}`,
                         );
                         const document =
                             await vscode.workspace.openTextDocument(
-                                netLinxFiles[0]
+                                netLinxFiles[0]!,
                             );
                         const fileName = await saveTokenData(
                             document,
-                            context.extensionPath
+                            context.extensionPath,
                         );
                         if (fileName) {
                             vscode.window.setStatusBarMessage(
                                 `Token analysis exported to: ${fileName}`,
-                                5000
+                                5000,
                             );
                         }
                     } else {
                         console.log(
-                            `No files matching ${filePattern} found in workspace for auto token analysis`
+                            `No files matching ${filePattern} found in workspace for auto token analysis`,
                         );
                     }
                 }

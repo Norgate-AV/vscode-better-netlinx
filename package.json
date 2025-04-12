@@ -76,15 +76,15 @@
             },
             {
                 "command": "netlinx.help",
-                "title": "Open NetLinx Help Reference"
+                "title": "NetLinx: Open Keywords Help Reference"
             },
             {
                 "command": "netlinx.transfer",
-                "title": "Open AMX File Transfer Utility"
+                "title": "NetLinx: Open File Transfer Utility"
             },
             {
                 "command": "netlinx.diagnostics",
-                "title": "Open Netlinx Diagnostics"
+                "title": "NetLinx: Open Diagnostics Utility"
             }
         ],
         "keybindings": [
@@ -113,6 +113,25 @@
                 "when": "editorFocus && editorLangId == netlinx"
             }
         ],
+        "menus": {
+            "editor/context": [
+                {
+                    "command": "netlinx.help",
+                    "group": "navigation",
+                    "when": "editorFocus && editorLangId == netlinx"
+                },
+                {
+                    "command": "netlinx.transfer",
+                    "group": "navigation",
+                    "when": "editorFocus && editorLangId == netlinx"
+                },
+                {
+                    "command": "netlinx.diagnostics",
+                    "group": "navigation",
+                    "when": "editorFocus && editorLangId == netlinx"
+                }
+            ]
+        },
         "configuration": {
             "title": "NetLinx",
             "properties": {
@@ -153,57 +172,77 @@
                 },
                 "netlinx.compiler.location": {
                     "type": "string",
-                    "default": "C:\\Program Files (x86)\\Common Files\\AMXShare\\COM\\NLRC.exe",
-                    "description": "Location of the Netlinx compiler. Please use double \\\\ for the path."
+                    "default": "C:/Program Files (x86)/Common Files/AMXShare/COM/NLRC.exe",
+                    "description": "Location of the Netlinx compiler"
                 },
                 "netlinx.transfer.location": {
                     "type": "string",
-                    "default": "C:\\Program Files (x86)\\AMX Control Disc\\FileTransfer 2\\FileTransfer2.exe",
+                    "default": "C:/Program Files (x86)/AMX Control Disc/FileTransfer 2/FileTransfer2.exe",
                     "description": "Location of the Netlinx File Transfer utility"
                 },
                 "netlinx.diagnostics.location": {
                     "type": "string",
-                    "default": "C:\\Program Files (x86)\\AMX Control Disc\\NetLinx Diagnostics\\NlDiagsPgm.exe",
+                    "default": "C:/Program Files (x86)/AMX Control Disc/NetLinx Diagnostics/NlDiagsPgm.exe",
                     "description": "Location of the Netlinx Diagnostics utility"
                 },
                 "netlinx.help.location": {
                     "type": "string",
-                    "default": "C:\\Program Files (x86)\\AMX Control Disc\\NetLinx Studio 4\\Netlinx-Keywords.chm",
+                    "default": "C:/Program Files (x86)/AMX Control Disc/NetLinx Studio 4/Netlinx-Keywords.chm",
                     "description": "Location of the Netlinx Help reference"
                 },
                 "netlinx.terminal.location": {
                     "type": "string",
-                    "default": "C:\\WINDOWS\\System32\\cmd.exe",
+                    "default": "C:/WINDOWS/System32/cmd.exe",
                     "description": "Location of the default windows cmd.exe"
                 },
                 "netlinx.includes.location": {
                     "type": "array",
                     "default": [
-                        "C:\\Program Files (x86)\\Common Files\\AMXShare\\AXIs"
+                        "C:/Program Files (x86)/Common Files/AMXShare/AXIs"
                     ],
-                    "description": "",
+                    "description": "NetLinx include path locations",
                     "items": {
                         "type": "string"
                     }
                 },
                 "netlinx.libraries.location": {
                     "type": "array",
-                    "default": [],
-                    "description": "",
+                    "default": [
+                        "C:/Program Files (x86)/Common Files/AMXShare/SYCs"
+                    ],
+                    "description": "NetLinx library path locations",
                     "items": {
                         "type": "string"
                     }
                 },
                 "netlinx.modules.location": {
                     "type": "array",
-                    "default": [],
-                    "description": "",
+                    "default": [
+                        "C:/Program Files (x86)/Common Files/AMXShare/Duet/bundle",
+                        "C:/Program Files (x86)/Common Files/AMXShare/Duet/lib",
+                        "C:/Program Files (x86)/Common Files/AMXShare/Duet/module"
+                    ],
+                    "description": "NetLinx module path locations",
                     "items": {
                         "type": "string"
                     }
                 }
             }
-        }
+        },
+        "taskDefinitions": [
+            {
+                "type": "netlinx-build",
+                "required": [
+                    "file"
+                ],
+                "properties": {
+                    "file": {
+                        "type": "string",
+                        "description": "The file to build"
+                    }
+                }
+            }
+        ]
     },
     "config": {
         "parser": {
@@ -212,21 +251,23 @@
     },
     "scripts": {
         "commit": "git-cz",
-        "vscode:prepublish": "pnpm build",
-        "build": "NODE_ENV=production tsup",
+        "vscode:prepublish": "pnpm build:prod",
+        "build": "tsup",
+        "build:prod": "NODE_ENV=production tsup",
         "dev": "tsup --watch",
         "watch": "tsup --watch",
-        "lint": "tsc --noEmit",
-        "compile": "tsup",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
         "test": "vitest",
         "test:ui": "vitest --ui",
         "test:coverage": "vitest --coverage",
         "package": "vsce package",
-        "prepare": "husky"
+        "install": "husky"
     },
     "devDependencies": {
         "@commitlint/cli": "^19.8.0",
         "@commitlint/config-conventional": "^19.8.0",
+        "@eslint/js": "^9.24.0",
         "@types/node": "^22.14.0",
         "@types/vscode": "^1.99.0",
         "@vitest/coverage-v8": "^3.1.1",
@@ -235,16 +276,21 @@
         "all-contributors-cli": "^6.26.1",
         "commitizen": "^4.3.1",
         "doctoc": "^2.2.1",
+        "eslint": "^9.24.0",
+        "eslint-config-prettier": "^10.1.2",
         "husky": "^9.1.7",
         "lint-staged": "^15.5.1",
         "ovsx": "^0.10.1",
         "prettier": "^3.5.3",
         "terser": "^5.39.0",
         "tsup": "^8.4.0",
+        "type-fest": "^4.39.1",
         "typescript": "^5.8.3",
+        "typescript-eslint": "^8.29.1",
         "vitest": "^3.1.1"
     },
     "dependencies": {
+        "execa": "^9.5.2",
         "vscode-languageclient": "^9.0.1"
     },
     "extensionDependencies": [],
