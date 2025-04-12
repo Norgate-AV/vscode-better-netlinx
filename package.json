@@ -4,6 +4,7 @@
     "description": "Better syntax highlighting for NetLinx",
     "version": "0.0.1",
     "publisher": "Norgate AV",
+    "icon": "assets/img/NetLinx1.png",
     "engines": {
         "vscode": "^1.98.0"
     },
