@@ -18,7 +18,6 @@ let client: LanguageClient | undefined;
 export async function startLanguageServer(
     context: vscode.ExtensionContext
 ): Promise<void> {
-    // Check if language server is enabled in settings
     const config = vscode.workspace.getConfiguration("netlinx");
     const isEnabled = config.get<boolean>("languageServer.enabled", true);
 
@@ -27,17 +26,16 @@ export async function startLanguageServer(
         return;
     }
 
-    // Get language configuration from package.json
     const langConfig = getLanguageConfiguration(context);
 
     // Get server path from settings
     // let serverPath = config.get<string>("languageServer.path", "/Users/damienbutt/Projects/netlinx-language-server/build/netlinx-language-server");
-    let serverPath = "/Users/damienbutt/Projects/netlinx-language-server/build/netlinx-language-server";
+    let serverPath =
+        "/Users/damienbutt/Projects/netlinx-language-server/build/netlinx-language-server";
     const serverArgs = config.get<string[]>("languageServer.args", []);
 
     console.log(serverPath || "netlinx-language-server doesn't exist");
 
-    // If path not specified in settings, use default based on platform
     if (!serverPath) {
         const platform = os.platform();
         serverPath =
@@ -51,19 +49,15 @@ export async function startLanguageServer(
         console.log(`Using language server path from settings: ${serverPath}`);
     }
 
-    // Options to control the language client
     const clientOptions: LanguageClientOptions = {
-        // Register the server for NetLinx documents
         documentSelector: [{ scheme: "file", language: langConfig.id }],
         synchronize: {
-            // Notify the server about file changes in the workspace
             fileEvents: vscode.workspace.createFileSystemWatcher(
                 createFileExtensionGlob(langConfig.extensions)
             ),
         },
     };
 
-    // Options to control the server process
     const serverOptions: ServerOptions = {
         command: serverPath,
         args: serverArgs,
@@ -72,7 +66,6 @@ export async function startLanguageServer(
         },
     };
 
-    // Create and start the language client
     client = new LanguageClient(
         "netlinx-language-server",
         "NetLinx Language Server",
@@ -80,17 +73,13 @@ export async function startLanguageServer(
         clientOptions
     );
 
-    // Start the client and add it to the subscriptions for proper cleanup
     try {
-        // Create a disposable that wraps the client start/stop
         const disposable = new vscode.Disposable(() => {
             client?.stop();
         });
 
         // Start the client
         await client.start();
-
-        // Add our disposable to the extension context
         context.subscriptions.push(disposable);
 
         console.log(
@@ -110,7 +99,8 @@ export async function startLanguageServer(
             error
         );
         vscode.window.showErrorMessage(
-            `Failed to start ${langConfig.displayName} language server: ${error instanceof Error ? error.message : String(error)
+            `Failed to start ${langConfig.displayName} language server: ${
+                error instanceof Error ? error.message : String(error)
             }`
         );
     }
