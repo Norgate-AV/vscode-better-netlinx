@@ -14,14 +14,16 @@
 
 Better NetLinx support for Visual Studio Code
 
+[ci]: https://img.shields.io/github/actions/workflow/status/Norgate-AV/vscode-better-netlinx/ci.yml?logo=github&label=CI
+
 ## Contents :book:
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
--   [Team :soccer:](#team-soccer)
--   [Contributors :sparkles:](#contributors-sparkles)
--   [LICENSE :balance_scale:](#license-balance_scale)
+- [Team :soccer:](#team-soccer)
+- [Contributors :sparkles:](#contributors-sparkles)
+- [LICENSE :balance_scale:](#license-balance_scale)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
