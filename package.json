@@ -1,10 +1,15 @@
 {
     "name": "vscode-better-netlinx",
     "displayName": "vscode-better-netlinx",
-    "description": "Better syntax highlighting for NetLinx",
+    "description": "Better NetLinx support for Visual Studio Code",
     "version": "0.0.1",
     "publisher": "Norgate AV",
     "icon": "assets/img/NetLinx1.png",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Norgate-AV/vscode-better-netlinx.git"
+    },
     "engines": {
         "vscode": "^1.98.0"
     },
@@ -68,6 +73,18 @@
             {
                 "command": "netlinx.disableThemeEnhancements",
                 "title": "NetLinx: Disable Theme Enhancements"
+            },
+            {
+                "command": "netlinx.help",
+                "title": "Open NetLinx Help Reference"
+            },
+            {
+                "command": "netlinx.transfer",
+                "title": "Open AMX File Transfer Utility"
+            },
+            {
+                "command": "netlinx.diagnostics",
+                "title": "Open Netlinx Diagnostics"
             }
         ],
         "keybindings": [
@@ -75,6 +92,24 @@
                 "command": "netlinx.inspectTokens",
                 "key": "ctrl+shift+alt+i",
                 "mac": "cmd+shift+alt+i",
+                "when": "editorFocus && editorLangId == netlinx"
+            },
+            {
+                "command": "netlinx.transfer",
+                "key": "ctrl+shift+f4",
+                "mac": "cmd+shift+f4",
+                "when": "editorFocus && editorLangId == netlinx"
+            },
+            {
+                "command": "netlinx.diagnostics",
+                "key": "ctrl+shift+f3",
+                "mac": "cmd+shift+f3",
+                "when": "editorFocus && editorLangId == netlinx"
+            },
+            {
+                "command": "netlinx.help",
+                "key": "ctrl+shift+f1",
+                "mac": "cmd+shift+f1",
                 "when": "editorFocus && editorLangId == netlinx"
             }
         ],
@@ -115,6 +150,57 @@
                     "description": "Number of days between checking for parser updates",
                     "minimum": 1,
                     "maximum": 90
+                },
+                "netlinx.compiler.location": {
+                    "type": "string",
+                    "default": "C:\\Program Files (x86)\\Common Files\\AMXShare\\COM\\NLRC.exe",
+                    "description": "Location of the Netlinx compiler. Please use double \\\\ for the path."
+                },
+                "netlinx.transfer.location": {
+                    "type": "string",
+                    "default": "C:\\Program Files (x86)\\AMX Control Disc\\FileTransfer 2\\FileTransfer2.exe",
+                    "description": "Location of the Netlinx File Transfer utility"
+                },
+                "netlinx.diagnostics.location": {
+                    "type": "string",
+                    "default": "C:\\Program Files (x86)\\AMX Control Disc\\NetLinx Diagnostics\\NlDiagsPgm.exe",
+                    "description": "Location of the Netlinx Diagnostics utility"
+                },
+                "netlinx.help.location": {
+                    "type": "string",
+                    "default": "C:\\Program Files (x86)\\AMX Control Disc\\NetLinx Studio 4\\Netlinx-Keywords.chm",
+                    "description": "Location of the Netlinx Help reference"
+                },
+                "netlinx.terminal.location": {
+                    "type": "string",
+                    "default": "C:\\WINDOWS\\System32\\cmd.exe",
+                    "description": "Location of the default windows cmd.exe"
+                },
+                "netlinx.includes.location": {
+                    "type": "array",
+                    "default": [
+                        "C:\\Program Files (x86)\\Common Files\\AMXShare\\AXIs"
+                    ],
+                    "description": "",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "netlinx.libraries.location": {
+                    "type": "array",
+                    "default": [],
+                    "description": "",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "netlinx.modules.location": {
+                    "type": "array",
+                    "default": [],
+                    "description": "",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         }
