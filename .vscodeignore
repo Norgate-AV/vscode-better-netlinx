@@ -1,4 +1,46 @@
+# Exclude VS Code-specific files
 .vscode/**
 .vscode-test/**
+
+# Exclude Git-related files
+.git/**
 .gitignore
-vsc-extension-quickstart.md
+
+# Exclude build and test configuration files
+tsconfig.json
+*.tsconfig.json
+*.test.json
+tsup.config.ts
+vitest.config.ts
+
+# Exclude environment and configuration files
+.env
+.nvmrc
+.lintstagedrc.json
+.all-contributorsrc
+
+# Exclude CI/CD and Husky files
+.github/**
+.husky/**
+
+# Exclude lock files
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+# Exclude documentation and changelogs
+# changelog.md
+# readme.md
+
+# Exclude token analysis and other large files
+token-analysis.json
+
+# Exclude source files (only include the compiled output)
+src/**
+test/**
+
+# Exclude existing package output
+dist/
+
+# Include the compiled output
+!out/**

@@ -6,3 +6,4 @@ out/
 token-analysis.json
 *.log
 .env
+dist/
