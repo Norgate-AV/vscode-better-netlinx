@@ -3,6 +3,7 @@ import path from "path";
 
 export default defineConfig({
     test: {
+        passWithNoTests: true,
         globals: true,
         environment: "node",
         include: ["test/**/*.test.ts"],
@@ -13,9 +14,11 @@ export default defineConfig({
             exclude: ["**/*.d.ts"],
         },
         setupFiles: ["./test/setup.ts"],
-        deps: {
-            external: ["vscode"],
-            inline: ["node-fetch"],
+        server: {
+            deps: {
+                external: ["vscode"],
+                inline: ["node-fetch"],
+            },
         },
         mockReset: true,
     },
