@@ -9,7 +9,8 @@
         "vscode": "^1.98.0"
     },
     "categories": [
-        "Programming Languages"
+        "Programming Languages",
+        "Snippets"
     ],
     "main": "./out/extension.js",
     "activationEvents": [
@@ -39,6 +40,12 @@
                 "language": "netlinx",
                 "scopeName": "source.netlinx",
                 "path": "./syntaxes/netlinx.tmLanguage.json"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "netlinx",
+                "path": "./snippets/snippets.json"
             }
         ],
         "commands": [
