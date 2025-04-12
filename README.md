@@ -1,65 +1,65 @@
-# vscode-better-netlinx README
+# vscode-better-netlinx
 
-This is the README for your extension "vscode-better-netlinx". After writing up a brief description, we recommend including the following sections.
-
-## Features
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
--   `myExtension.enable`: Enable/disable this extension.
--   `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+<div align="center">
+    <img align="center" src="./assets/img/NetLinx1.png" alt="netlinx-logo" width="150"/>
+</div>
 
 ---
 
-## Working with Markdown
+[![CI][ci]](https://github.com/Norgate-AV/vscode-better-netlinx/actions/workflows/ci.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/Norgate-AV/vscode-better-netlinx)](https://github.com/Norgate-AV/vscode-better-netlinx/releases)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
+[![GitHub contributors](https://img.shields.io/github/contributors/Norgate-AV/vscode-better-netlinx)](https://github.com/Norgate-AV/vscode-better-netlinx/graphs/contributors)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+Better NetLinx support for Visual Studio Code
 
--   Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
--   Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
--   Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+## Contents :book:
 
-## For more information
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
--   [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
--   [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+-   [Team :soccer:](#team-soccer)
+-   [Contributors :sparkles:](#contributors-sparkles)
+-   [LICENSE :balance_scale:](#license-balance_scale)
 
-**Enjoy!**
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Team :soccer:
+
+This project is maintained by the following person(s) and a bunch of [awesome contributors](https://github.com/Norgate-AV/vscode-better-netlinx/graphs/contributors).
+
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/damienbutt"><img src="https://avatars.githubusercontent.com/damienbutt?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Damien Butt</b></sub></a><br /></td>
+  </tr>
+</table>
+
+## Contributors :sparkles:
+
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+
+Thanks go to these awesome people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://allcontributors.org) specification.
+
+Contributions are welcome! Please fork and open a pull request if you have any suggestions or improvements.
+
+Any help would be greatly appreciated.
+
+## LICENSE :balance_scale:
+
+[MIT](./LICENSE)
