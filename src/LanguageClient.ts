@@ -1,12 +1,13 @@
 import * as vscode from "vscode";
 import fs from "node:fs";
+import os from "node:os";
 import {
     LanguageClient,
     LanguageClientOptions,
     RevealOutputChannelOn,
     ServerOptions,
 } from "vscode-languageclient/node";
-import os from "node:os";
+import chokidar from "chokidar";
 import {
     createFileExtensionGlob,
     getLanguageConfiguration,
@@ -171,32 +172,66 @@ async function setupLogFileWatcher(
             console.error(
                 "Can't set up log watcher - missing log path or output channel",
             );
+
             return;
         }
 
-        // Display initial content
+        let currentPosition = 0;
+
+        if (!fs.existsSync(logPath)) {
+            console.error(`Log file does not exist: ${logPath}`);
+            return;
+        }
+
         try {
-            if (fs.existsSync(logPath)) {
-                const initialContent = fs.readFileSync(logPath, "utf8");
-                outputChannel.append(initialContent);
-            }
+            const stats = fs.statSync(logPath);
+            const initialContent = fs.readFileSync(logPath, "utf8");
+            outputChannel.append(initialContent);
+            currentPosition = stats.size;
         } catch (err) {
             console.error("Error reading initial log file:", err);
         }
 
-        // Set up file watcher to stream changes
-        const watcher = fs.watch(logPath, (eventType) => {
-            if (eventType === "change" && outputChannel) {
-                try {
-                    // Read the latest content (you might want to optimize to read only new lines)
-                    const content = fs.readFileSync(logPath, "utf8");
+        const watcher = chokidar.watch(logPath, {
+            persistent: true,
+            awaitWriteFinish: { stabilityThreshold: 300 },
+        });
 
-                    // Clear and update
+        watcher.on("change", () => {
+            if (!outputChannel) {
+                return;
+            }
+
+            try {
+                const stats = fs.statSync(logPath);
+
+                // Handle file truncation
+                if (stats.size < currentPosition) {
                     outputChannel.clear();
-                    outputChannel.append(content);
-                } catch (err) {
-                    console.error("Error updating log in output channel:", err);
+                    currentPosition = 0;
                 }
+
+                // Stream new content
+                if (stats.size > currentPosition) {
+                    const stream = fs.createReadStream(logPath, {
+                        encoding: "utf8",
+                        start: currentPosition,
+                    });
+
+                    stream.on("data", (chunk) =>
+                        outputChannel?.append(chunk.toString()),
+                    );
+
+                    stream.on("end", () => {
+                        currentPosition = stats.size;
+                    });
+
+                    stream.on("error", (err) => {
+                        console.error("Stream error:", err);
+                    });
+                }
+            } catch (err) {
+                console.error("Error updating log:", err);
             }
         });
 
