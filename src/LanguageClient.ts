@@ -1,7 +1,9 @@
 import * as vscode from "vscode";
+import fs from "node:fs";
 import {
     LanguageClient,
     LanguageClientOptions,
+    RevealOutputChannelOn,
     ServerOptions,
 } from "vscode-languageclient/node";
 import os from "node:os";
@@ -11,6 +13,7 @@ import {
 } from "./ExtensionConfig";
 
 let client: LanguageClient | undefined;
+let outputChannel: vscode.OutputChannel | undefined;
 
 /**
  * Start the NetLinx language server
@@ -49,6 +52,11 @@ export async function startLanguageServer(
         console.log(`Using language server path from settings: ${serverPath}`);
     }
 
+    outputChannel = vscode.window.createOutputChannel(
+        "NetLinx Language Server",
+        { log: true },
+    );
+
     const clientOptions: LanguageClientOptions = {
         documentSelector: [{ scheme: "file", language: langConfig.id }],
         synchronize: {
@@ -56,6 +64,8 @@ export async function startLanguageServer(
                 createFileExtensionGlob(langConfig.extensions),
             ),
         },
+        outputChannel,
+        revealOutputChannelOn: RevealOutputChannelOn.Info,
     };
 
     const serverOptions: ServerOptions = {
@@ -85,9 +95,12 @@ export async function startLanguageServer(
         console.log(
             `${langConfig.displayName} language server started at: ${serverPath}`,
         );
+
         if (serverArgs.length > 0) {
             console.log(`Language server arguments: ${serverArgs.join(" ")}`);
         }
+
+        await setupLogFileWatcher(context);
 
         // Show info message when the server is ready
         vscode.window.showInformationMessage(
@@ -114,6 +127,11 @@ export function stopLanguageServer(): Thenable<void> | undefined {
         return undefined;
     }
 
+    if (outputChannel) {
+        outputChannel.dispose();
+        outputChannel = undefined;
+    }
+
     console.log("Stopping NetLinx language server");
     return client.stop();
 }
@@ -130,5 +148,64 @@ export async function getServerLogPath(): Promise<string | undefined> {
         throw new Error(
             `Failed to get log path: ${error instanceof Error ? error.message : String(error)}`,
         );
+    }
+}
+
+export function showOutputChannel(): void {
+    if (outputChannel) {
+        outputChannel.show();
+    } else {
+        vscode.window.showErrorMessage(
+            "NetLinx Language Server output channel not available",
+        );
+    }
+}
+
+async function setupLogFileWatcher(
+    context: vscode.ExtensionContext,
+): Promise<void> {
+    try {
+        const logPath = await getServerLogPath();
+
+        if (!logPath || !outputChannel) {
+            console.error(
+                "Can't set up log watcher - missing log path or output channel",
+            );
+            return;
+        }
+
+        // Display initial content
+        try {
+            if (fs.existsSync(logPath)) {
+                const initialContent = fs.readFileSync(logPath, "utf8");
+                outputChannel.append(initialContent);
+            }
+        } catch (err) {
+            console.error("Error reading initial log file:", err);
+        }
+
+        // Set up file watcher to stream changes
+        const watcher = fs.watch(logPath, (eventType) => {
+            if (eventType === "change" && outputChannel) {
+                try {
+                    // Read the latest content (you might want to optimize to read only new lines)
+                    const content = fs.readFileSync(logPath, "utf8");
+
+                    // Clear and update
+                    outputChannel.clear();
+                    outputChannel.append(content);
+                } catch (err) {
+                    console.error("Error updating log in output channel:", err);
+                }
+            }
+        });
+
+        context.subscriptions.push(
+            new vscode.Disposable(() => watcher.close()),
+        );
+
+        console.log(`Set up watcher for log file at: ${logPath}`);
+    } catch (err) {
+        console.error("Error setting up log file watcher:", err);
     }
 }

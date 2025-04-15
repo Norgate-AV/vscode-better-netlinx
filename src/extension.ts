@@ -8,6 +8,7 @@ import {
     startLanguageServer,
     stopLanguageServer,
     getServerLogPath,
+    showOutputChannel,
 } from "./LanguageClient";
 import { getCommands } from "./Commands";
 import { getTasks } from "./Tasks";
@@ -35,7 +36,6 @@ export async function activate(context: vscode.ExtensionContext) {
                         return;
                     }
 
-                    // Open the log file
                     const doc =
                         await vscode.workspace.openTextDocument(logPath);
                     vscode.window.showTextDocument(doc);
@@ -44,6 +44,12 @@ export async function activate(context: vscode.ExtensionContext) {
                         `Failed to open logs: ${err}`,
                     );
                 }
+            }),
+        );
+
+        context.subscriptions.push(
+            vscode.commands.registerCommand("netlinx.showOutputChannel", () => {
+                showOutputChannel();
             }),
         );
 

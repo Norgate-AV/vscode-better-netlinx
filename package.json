@@ -85,6 +85,14 @@
             {
                 "command": "netlinx.diagnostics",
                 "title": "NetLinx: Open Diagnostics Utility"
+            },
+            {
+                "command": "netlinx.openLogs",
+                "title": "NetLinx: Open Server Logs"
+            },
+            {
+                "command": "netlinx.showOutputChannel",
+                "title": "NetLinx: Show Server Output"
             }
         ],
         "keybindings": [
