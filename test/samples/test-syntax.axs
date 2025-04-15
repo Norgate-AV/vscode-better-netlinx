@@ -10,6 +10,8 @@ PROGRAM_NAME='TestHighlighting'
 #include 'SNAPI'
 #INCLUDE 'UnicodeLib'
 #INCLUDE 'Math'
+#include 'Foo'
+#include 'bar'
 
 // Define compiler directives
 #IF_DEFINED ENABLE_DEBUGGING

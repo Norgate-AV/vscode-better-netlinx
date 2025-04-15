@@ -117,3 +117,18 @@ export function stopLanguageServer(): Thenable<void> | undefined {
     console.log("Stopping NetLinx language server");
     return client.stop();
 }
+
+export async function getServerLogPath(): Promise<string | undefined> {
+    if (!client) {
+        throw new Error("Language server is not running");
+    }
+
+    try {
+        return (await client.sendRequest("netlinx/serverLogPath")) as string;
+    } catch (error) {
+        console.error("Failed to get log path from server:", error);
+        throw new Error(
+            `Failed to get log path: ${error instanceof Error ? error.message : String(error)}`,
+        );
+    }
+}

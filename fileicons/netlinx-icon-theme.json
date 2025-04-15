@@ -1,0 +1,26 @@
+{
+    "iconDefinitions": {
+        "_netlinx_file": {
+            "iconPath": "./icons/netlinx-file.svg"
+        },
+        "_netlinx_include": {
+            "iconPath": "./icons/netlinx-include.svg"
+        }
+    },
+    "fileExtensions": {
+        "axs": "_netlinx_file",
+        "axi": "_netlinx_include"
+    },
+    "light": {
+        "fileExtensions": {
+            "axs": "_netlinx_file",
+            "axi": "_netlinx_include"
+        }
+    },
+    "highContrast": {
+        "fileExtensions": {
+            "axs": "_netlinx_file",
+            "axi": "_netlinx_include"
+        }
+    }
+}
